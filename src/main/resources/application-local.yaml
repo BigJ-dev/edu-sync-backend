@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/edusync
+    username: edusync
+    password: edusync123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    baseline-on-migrate: true
+    validate-on-migrate: false
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
