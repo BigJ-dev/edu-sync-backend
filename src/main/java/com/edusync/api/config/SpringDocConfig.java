@@ -70,4 +70,81 @@ public class SpringDocConfig {
                 .pathsToMatch("/courses/**")
                 .build();
     }
+
+    @Bean
+    GroupedOpenApi classSessionApi() {
+        return GroupedOpenApi.builder()
+                .group("6. class-sessions")
+                .pathsToMatch("/modules/**/class-sessions/**", "/modules/**/class-sessions")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi attendanceApi() {
+        return GroupedOpenApi.builder()
+                .group("7. attendance")
+                .pathsToMatch("/class-sessions/**/attendance/**", "/class-sessions/**/attendance")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi materialApi() {
+        return GroupedOpenApi.builder()
+                .group("8. materials")
+                .pathsToMatch("/modules/**/materials/**", "/modules/**/materials")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi assessmentApi() {
+        return GroupedOpenApi.builder()
+                .group("9. assessments")
+                .pathsToMatch(
+                        "/modules/**/assessments/**", "/modules/**/assessments",
+                        "/assessments/**/rubric/**", "/assessments/**/rubric",
+                        "/assessments/**/submissions/**", "/assessments/**/submissions",
+                        "/submissions/**/grades/**", "/submissions/**/grades"
+                )
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi broadcastApi() {
+        return GroupedOpenApi.builder()
+                .group("10. broadcasts")
+                .pathsToMatch("/broadcasts/**", "/broadcasts")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi messagingApi() {
+        return GroupedOpenApi.builder()
+                .group("11. messaging")
+                .pathsToMatch(
+                        "/courses/**/threads/**", "/courses/**/threads",
+                        "/threads/**/messages/**", "/threads/**/messages"
+                )
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi notificationApi() {
+        return GroupedOpenApi.builder()
+                .group("12. notifications")
+                .pathsToMatch("/notifications/**", "/notifications")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi quizApi() {
+        return GroupedOpenApi.builder()
+                .group("13. quizzes")
+                .pathsToMatch(
+                        "/modules/**/quizzes/**", "/modules/**/quizzes",
+                        "/quizzes/**/questions/**", "/quizzes/**/questions",
+                        "/quizzes/**/attempts/**", "/quizzes/**/attempts",
+                        "/attempts/**/answers/**", "/attempts/**/answers"
+                )
+                .build();
+    }
 }

@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long>, JpaSpecificationExecutor<AppUser> {
 
+    Optional<AppUser> findByUuid(UUID uuid);
+
     Optional<AppUser> findByUuidAndRole(UUID uuid, UserRole role);
 
     Optional<AppUser> findByCognitoSubAndRole(String cognitoSub, UserRole role);
