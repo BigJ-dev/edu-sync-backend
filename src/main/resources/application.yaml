@@ -1,3 +1,11 @@
+server:
+  servlet:
+    context-path: /edu-sync
+
 spring:
   application:
     name: EduSync
+
+springdoc:
+  swagger-ui:
+    path: /docs
