@@ -185,7 +185,47 @@ public enum ValidationMessage {
     // Quiz Attempt
     ATTEMPT_STUDENT_REQUIRED("Student is required"),
     ATTEMPT_QUESTION_REQUIRED("Question is required"),
-    ATTEMPT_ANSWER_TEXT_SIZE("Answer text must not exceed 2000 characters");
+    ATTEMPT_ANSWER_TEXT_SIZE("Answer text must not exceed 2000 characters"),
+
+    // Student Group
+    GROUP_NAME_REQUIRED("Group name is required"),
+    GROUP_NAME_SIZE("Group name must not exceed 100 characters"),
+    GROUP_COURSE_REQUIRED("Course is required"),
+    GROUP_CREATED_BY_REQUIRED("Creator is required"),
+    GROUP_MAX_MEMBERS_MIN("Maximum members must be at least 1"),
+    GROUP_STUDENT_REQUIRED("Student is required"),
+    GROUP_ROLE_REQUIRED("Member role is required"),
+
+    // Course Category
+    CATEGORY_NAME_REQUIRED("Category name is required"),
+    CATEGORY_NAME_SIZE("Category name must not exceed 100 characters"),
+    CATEGORY_SORT_ORDER_MIN("Sort order must be 0 or greater"),
+    CATEGORY_ICON_SIZE("Icon name must not exceed 50 characters"),
+    CATEGORY_COURSE_REQUIRED("Course is required"),
+
+    // Certificate
+    CERTIFICATE_COURSE_REQUIRED("Course is required"),
+    CERTIFICATE_STUDENT_REQUIRED("Student is required"),
+    CERTIFICATE_ISSUED_BY_REQUIRED("Issuer is required"),
+    CERTIFICATE_COMPLETION_DATE_REQUIRED("Completion date is required"),
+    CERTIFICATE_S3_KEY_SIZE("S3 key must not exceed 500 characters"),
+    CERTIFICATE_REVOCATION_REASON_REQUIRED("Revocation reason is required"),
+    CERTIFICATE_REVOCATION_REASON_SIZE("Revocation reason must not exceed 500 characters"),
+
+    // Focus Mode
+    FOCUS_LECTURER_REQUIRED("Lecturer is required"),
+    FOCUS_COURSE_REQUIRED("Course is required"),
+    FOCUS_REASON_SIZE("Reason must not exceed 255 characters"),
+
+    // Audit Log
+    AUDIT_ACTION_REQUIRED("Action is required"),
+    AUDIT_ENTITY_TYPE_REQUIRED("Entity type is required"),
+    AUDIT_ENTITY_TYPE_SIZE("Entity type must not exceed 50 characters"),
+    AUDIT_ENTITY_ID_REQUIRED("Entity ID is required"),
+
+    // System Setting
+    SETTING_VALUE_REQUIRED("Setting value is required"),
+    SETTING_UPDATED_BY_REQUIRED("Updated by is required");
 
     private final String message;
 
@@ -369,4 +409,44 @@ public enum ValidationMessage {
     public static final String _ATTEMPT_STUDENT_REQUIRED = "Student is required";
     public static final String _ATTEMPT_QUESTION_REQUIRED = "Question is required";
     public static final String _ATTEMPT_ANSWER_TEXT_SIZE = "Answer text must not exceed 2000 characters";
+
+    // Student Group
+    public static final String _GROUP_NAME_REQUIRED = "Group name is required";
+    public static final String _GROUP_NAME_SIZE = "Group name must not exceed 100 characters";
+    public static final String _GROUP_COURSE_REQUIRED = "Course is required";
+    public static final String _GROUP_CREATED_BY_REQUIRED = "Creator is required";
+    public static final String _GROUP_MAX_MEMBERS_MIN = "Maximum members must be at least 1";
+    public static final String _GROUP_STUDENT_REQUIRED = "Student is required";
+    public static final String _GROUP_ROLE_REQUIRED = "Member role is required";
+
+    // Course Category
+    public static final String _CATEGORY_NAME_REQUIRED = "Category name is required";
+    public static final String _CATEGORY_NAME_SIZE = "Category name must not exceed 100 characters";
+    public static final String _CATEGORY_SORT_ORDER_MIN = "Sort order must be 0 or greater";
+    public static final String _CATEGORY_ICON_SIZE = "Icon name must not exceed 50 characters";
+    public static final String _CATEGORY_COURSE_REQUIRED = "Course is required";
+
+    // Certificate
+    public static final String _CERTIFICATE_COURSE_REQUIRED = "Course is required";
+    public static final String _CERTIFICATE_STUDENT_REQUIRED = "Student is required";
+    public static final String _CERTIFICATE_ISSUED_BY_REQUIRED = "Issuer is required";
+    public static final String _CERTIFICATE_COMPLETION_DATE_REQUIRED = "Completion date is required";
+    public static final String _CERTIFICATE_S3_KEY_SIZE = "S3 key must not exceed 500 characters";
+    public static final String _CERTIFICATE_REVOCATION_REASON_REQUIRED = "Revocation reason is required";
+    public static final String _CERTIFICATE_REVOCATION_REASON_SIZE = "Revocation reason must not exceed 500 characters";
+
+    // Focus Mode
+    public static final String _FOCUS_LECTURER_REQUIRED = "Lecturer is required";
+    public static final String _FOCUS_COURSE_REQUIRED = "Course is required";
+    public static final String _FOCUS_REASON_SIZE = "Reason must not exceed 255 characters";
+
+    // Audit Log
+    public static final String _AUDIT_ACTION_REQUIRED = "Action is required";
+    public static final String _AUDIT_ENTITY_TYPE_REQUIRED = "Entity type is required";
+    public static final String _AUDIT_ENTITY_TYPE_SIZE = "Entity type must not exceed 50 characters";
+    public static final String _AUDIT_ENTITY_ID_REQUIRED = "Entity ID is required";
+
+    // System Setting
+    public static final String _SETTING_VALUE_REQUIRED = "Setting value is required";
+    public static final String _SETTING_UPDATED_BY_REQUIRED = "Updated by is required";
 }

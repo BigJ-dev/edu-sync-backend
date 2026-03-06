@@ -1,0 +1,16 @@
+package com.edusync.api.audit.enums;
+
+public enum AuditAction {
+    CREATE,
+    UPDATE,
+    DELETE,
+    STATUS_CHANGE,
+    GRADE_ASSIGNED,
+    GRADE_CHANGED,
+    ATTENDANCE_OVERRIDE,
+    ENROLLMENT_CHANGE,
+    ESCALATION,
+    FOCUS_MODE_TOGGLE,
+    CERTIFICATE_ISSUED,
+    PERMISSION_CHANGE
+}
