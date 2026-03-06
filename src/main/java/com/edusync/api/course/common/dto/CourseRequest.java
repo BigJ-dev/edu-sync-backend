@@ -1,6 +1,7 @@
 package com.edusync.api.course.common.dto;
 
 import com.edusync.api.course.common.enums.CourseStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import static com.edusync.api.common.validation.ValidationMessage.*;
 
 public sealed interface CourseRequest {
 
+    @Schema(name = "CourseCreate")
     record Create(
             @NotBlank(message = _COURSE_CODE_REQUIRED)
             @Size(max = 20, message = _COURSE_CODE_SIZE)
@@ -41,6 +43,7 @@ public sealed interface CourseRequest {
             Integer maxStudents
     ) implements CourseRequest {}
 
+    @Schema(name = "CourseUpdate")
     record Update(
             @NotBlank(message = _COURSE_TITLE_REQUIRED)
             @Size(max = 255, message = _COURSE_TITLE_SIZE)
@@ -65,6 +68,7 @@ public sealed interface CourseRequest {
             Integer maxStudents
     ) implements CourseRequest {}
 
+    @Schema(name = "CourseUpdateStatus")
     record UpdateStatus(
             @NotNull(message = _COURSE_STATUS_REQUIRED)
             CourseStatus status
