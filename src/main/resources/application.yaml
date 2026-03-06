@@ -6,6 +6,11 @@ spring:
   application:
     name: EduSync
 
+aws:
+  s3:
+    bucket: ${AWS_S3_BUCKET:edusync-uploads}
+    region: ${AWS_REGION:af-south-1}
+
 springdoc:
   swagger-ui:
     path: /docs

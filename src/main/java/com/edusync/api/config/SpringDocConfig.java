@@ -195,4 +195,12 @@ public class SpringDocConfig {
                 .pathsToMatch("/settings/**", "/settings")
                 .build();
     }
+
+    @Bean
+    GroupedOpenApi s3Api() {
+        return GroupedOpenApi.builder()
+                .group("20. s3-storage")
+                .pathsToMatch("/s3/**", "/s3")
+                .build();
+    }
 }
