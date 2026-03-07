@@ -11,6 +11,10 @@ aws:
     enabled: ${AWS_S3_ENABLED:false}
     bucket: ${AWS_S3_BUCKET:edusync-uploads}
     region: ${AWS_REGION:af-south-1}
+  messaging:
+    enabled: ${AWS_MESSAGING_ENABLED:false}
+    region: ${AWS_REGION:af-south-1}
+    from-email: ${AWS_SES_FROM_EMAIL:noreply@edusync.co.za}
 
 azure:
   ad:

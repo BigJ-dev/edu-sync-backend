@@ -213,9 +213,25 @@ public class SpringDocConfig {
     }
 
     @Bean
+    GroupedOpenApi smsApi() {
+        return GroupedOpenApi.builder()
+                .group("22. sms")
+                .pathsToMatch("/sms/**", "/sms")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi emailApi() {
+        return GroupedOpenApi.builder()
+                .group("23. email")
+                .pathsToMatch("/email/**", "/email")
+                .build();
+    }
+
+    @Bean
     GroupedOpenApi teamsApi() {
         return GroupedOpenApi.builder()
-                .group("22. teams")
+                .group("24. teams")
                 .pathsToMatch("/teams/**", "/teams")
                 .build();
     }
