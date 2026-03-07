@@ -203,4 +203,12 @@ public class SpringDocConfig {
                 .pathsToMatch("/s3/**", "/s3")
                 .build();
     }
+
+    @Bean
+    GroupedOpenApi teamsApi() {
+        return GroupedOpenApi.builder()
+                .group("21. teams")
+                .pathsToMatch("/teams/**", "/teams")
+                .build();
+    }
 }

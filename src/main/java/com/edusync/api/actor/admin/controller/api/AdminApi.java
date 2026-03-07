@@ -28,7 +28,7 @@ public interface AdminApi {
     )
     @ApiResponse(responseCode = "201", description = "Admin created successfully")
     @ApiResponse(responseCode = "409", description = "Email or Cognito identity already exists")
-    AppUserResponse create(@Valid @RequestBody AppUserRequest.Create request);
+    AppUserResponse createAdmin(@Valid @RequestBody AppUserRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -37,7 +37,7 @@ public interface AdminApi {
                     "and searching by first name, last name, or email."
     )
     @ApiResponse(responseCode = "200", description = "Admins retrieved successfully")
-    Page<AppUserResponse> findAll(
+    Page<AppUserResponse> findAllAdmins(
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) String search,
             Pageable pageable);
@@ -50,7 +50,7 @@ public interface AdminApi {
     )
     @ApiResponse(responseCode = "200", description = "Admin retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Admin not found")
-    AppUserResponse findByUuid(@PathVariable UUID uuid);
+    AppUserResponse findAdminByUuid(@PathVariable UUID uuid);
 
     @PutMapping("/{uuid}")
     @Operation(
@@ -60,7 +60,7 @@ public interface AdminApi {
     )
     @ApiResponse(responseCode = "200", description = "Admin updated successfully")
     @ApiResponse(responseCode = "404", description = "Admin not found")
-    AppUserResponse update(@PathVariable UUID uuid, @Valid @RequestBody AppUserRequest.Update request);
+    AppUserResponse updateAdmin(@PathVariable UUID uuid, @Valid @RequestBody AppUserRequest.Update request);
 
     @GetMapping("/by-cognito-sub/{cognitoSub}")
     @Operation(
@@ -70,7 +70,7 @@ public interface AdminApi {
     )
     @ApiResponse(responseCode = "200", description = "Admin retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Admin not found")
-    AppUserResponse findByCognitoSub(@PathVariable String cognitoSub);
+    AppUserResponse findAdminByCognitoSub(@PathVariable String cognitoSub);
 
     // ── Lecturer blocking (admin only) ──────────────────────────────────
 

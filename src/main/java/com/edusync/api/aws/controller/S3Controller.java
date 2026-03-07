@@ -16,17 +16,17 @@ public class S3Controller implements S3Api {
     private final S3Service service;
 
     @Override
-    public PresignedUrlResponse generateUploadUrl(S3UploadRequest request) {
-        return service.generateUploadUrl(request);
+    public PresignedUrlResponse generateS3UploadUrl(S3UploadRequest request) {
+        return service.generateS3UploadUrl(request);
     }
 
     @Override
-    public PresignedUrlResponse generateDownloadUrl(String key) {
-        return service.generateDownloadUrl(key);
+    public PresignedUrlResponse generateS3DownloadUrl(String key) {
+        return service.generateS3DownloadUrl(key);
     }
 
     @Override
-    public void deleteObject(String key) {
-        service.deleteObject(key);
+    public void deleteS3Object(String key) {
+        service.deleteS3Object(key);
     }
 }

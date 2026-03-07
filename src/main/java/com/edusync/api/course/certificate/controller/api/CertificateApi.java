@@ -28,7 +28,7 @@ public interface CertificateApi {
     @ApiResponse(responseCode = "400", description = "Enrollment is not in COMPLETED status")
     @ApiResponse(responseCode = "404", description = "Course, student, or enrollment not found")
     @ApiResponse(responseCode = "409", description = "Certificate already issued for this enrollment")
-    CertificateResponse issue(@Valid @RequestBody CertificateRequest.Issue request);
+    CertificateResponse issueCertificate(@Valid @RequestBody CertificateRequest.Issue request);
 
     @GetMapping
     @Operation(
@@ -37,7 +37,7 @@ public interface CertificateApi {
                     "Supports filtering by course, status, and certificate number search."
     )
     @ApiResponse(responseCode = "200", description = "Certificates retrieved successfully")
-    List<CertificateResponse> findAll(
+    List<CertificateResponse> findAllCertificates(
             @RequestParam(required = false) UUID courseUuid,
             @RequestParam(required = false) CertificateStatus status,
             @RequestParam(required = false) String search);
@@ -49,7 +49,7 @@ public interface CertificateApi {
     )
     @ApiResponse(responseCode = "200", description = "Certificate retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Certificate not found")
-    CertificateResponse findByUuid(@PathVariable UUID certificateUuid);
+    CertificateResponse findCertificateByUuid(@PathVariable UUID certificateUuid);
 
     @GetMapping("/verify/{verificationCode}")
     @Operation(
@@ -59,7 +59,7 @@ public interface CertificateApi {
     )
     @ApiResponse(responseCode = "200", description = "Certificate verified successfully")
     @ApiResponse(responseCode = "404", description = "Certificate not found")
-    CertificateResponse verify(@PathVariable String verificationCode);
+    CertificateResponse verifyCertificate(@PathVariable String verificationCode);
 
     @PatchMapping("/{certificateUuid}/revoke")
     @Operation(
@@ -69,7 +69,7 @@ public interface CertificateApi {
     )
     @ApiResponse(responseCode = "200", description = "Certificate revoked successfully")
     @ApiResponse(responseCode = "404", description = "Certificate not found")
-    CertificateResponse revoke(
+    CertificateResponse revokeCertificate(
             @PathVariable UUID certificateUuid,
             @Valid @RequestBody CertificateRequest.Revoke request);
 
@@ -80,5 +80,5 @@ public interface CertificateApi {
     )
     @ApiResponse(responseCode = "200", description = "Certificates retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Student not found")
-    List<CertificateResponse> findByStudent(@PathVariable UUID studentUuid);
+    List<CertificateResponse> findCertificatesByStudent(@PathVariable UUID studentUuid);
 }

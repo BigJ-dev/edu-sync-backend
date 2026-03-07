@@ -21,26 +21,26 @@ public class QuizController implements QuizApi {
 
     @Override
     public QuizResponse create(UUID moduleUuid, QuizRequest.Create request) {
-        return service.create(moduleUuid, request);
+        return service.createQuiz(moduleUuid, request);
     }
 
     @Override
     public List<QuizResponse> findAllByModule(UUID moduleUuid, QuizStatus status, String search) {
-        return service.findAllByModule(moduleUuid, status, search);
+        return service.findAllQuizzesByModule(moduleUuid, status, search);
     }
 
     @Override
     public QuizResponse findByUuid(UUID moduleUuid, UUID quizUuid) {
-        return service.findByUuid(quizUuid);
+        return service.findQuizByUuid(quizUuid);
     }
 
     @Override
     public QuizResponse update(UUID moduleUuid, UUID quizUuid, QuizRequest.Update request) {
-        return service.update(quizUuid, request);
+        return service.updateQuiz(quizUuid, request);
     }
 
     @Override
     public QuizResponse updateStatus(UUID moduleUuid, UUID quizUuid, QuizRequest.UpdateStatus request) {
-        return service.updateStatus(quizUuid, request);
+        return service.updateQuizStatus(quizUuid, request);
     }
 }

@@ -20,11 +20,11 @@ public class RubricGradeController implements RubricGradeApi {
 
     @Override
     public RubricGradeResponse award(UUID submissionUuid, UUID criteriaUuid, RubricGradeRequest.Award request) {
-        return service.award(submissionUuid, criteriaUuid, request);
+        return service.awardRubricGrade(submissionUuid, criteriaUuid, request);
     }
 
     @Override
     public List<RubricGradeResponse> findAllBySubmission(UUID submissionUuid) {
-        return service.findAllBySubmission(submissionUuid);
+        return service.findAllRubricGradesBySubmission(submissionUuid);
     }
 }

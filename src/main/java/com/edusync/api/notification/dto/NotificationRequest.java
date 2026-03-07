@@ -37,6 +37,15 @@ public sealed interface NotificationRequest {
             Long entityId
     ) implements NotificationRequest {}
 
+    @Schema(name = "NotificationFilter")
+    record Filter(
+            RecipientType recipientType,
+            Long recipientId,
+            NotificationType notificationType,
+            UUID courseUuid,
+            Boolean unreadOnly
+    ) implements NotificationRequest {}
+
     @Schema(name = "NotificationMarkRead")
     record MarkRead() implements NotificationRequest {}
 

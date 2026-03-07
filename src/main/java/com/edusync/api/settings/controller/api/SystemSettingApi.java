@@ -21,7 +21,7 @@ public interface SystemSettingApi {
                     "Settings are ordered alphabetically by key."
     )
     @ApiResponse(responseCode = "200", description = "System settings retrieved successfully")
-    List<SettingResponse> findAll(@RequestParam(required = false) String category);
+    List<SettingResponse> findAllSystemSettings(@RequestParam(required = false) String category);
 
     @GetMapping("/{key}")
     @Operation(
@@ -30,7 +30,7 @@ public interface SystemSettingApi {
     )
     @ApiResponse(responseCode = "200", description = "System setting retrieved successfully")
     @ApiResponse(responseCode = "404", description = "System setting not found")
-    SettingResponse findByKey(@PathVariable String key);
+    SettingResponse findSystemSettingByKey(@PathVariable String key);
 
     @PutMapping("/{key}")
     @Operation(
@@ -39,5 +39,5 @@ public interface SystemSettingApi {
     )
     @ApiResponse(responseCode = "200", description = "System setting updated successfully")
     @ApiResponse(responseCode = "404", description = "System setting or user not found")
-    SettingResponse update(@PathVariable String key, @Valid @RequestBody SettingRequest.Update request);
+    SettingResponse updateSystemSetting(@PathVariable String key, @Valid @RequestBody SettingRequest.Update request);
 }

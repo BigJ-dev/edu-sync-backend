@@ -28,7 +28,7 @@ public interface LecturerApi {
     )
     @ApiResponse(responseCode = "201", description = "Lecturer created successfully")
     @ApiResponse(responseCode = "409", description = "Email or Cognito identity already exists")
-    AppUserResponse create(@Valid @RequestBody AppUserRequest.Create request);
+    AppUserResponse createLecturer(@Valid @RequestBody AppUserRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -37,7 +37,7 @@ public interface LecturerApi {
                     "and searching by first name, last name, or email."
     )
     @ApiResponse(responseCode = "200", description = "Lecturers retrieved successfully")
-    Page<AppUserResponse> findAll(
+    Page<AppUserResponse> findAllLecturers(
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) String search,
             Pageable pageable);
@@ -50,7 +50,7 @@ public interface LecturerApi {
     )
     @ApiResponse(responseCode = "200", description = "Lecturer retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer not found")
-    AppUserResponse findByUuid(@PathVariable UUID uuid);
+    AppUserResponse findLecturerByUuid(@PathVariable UUID uuid);
 
     @PutMapping("/{uuid}")
     @Operation(
@@ -60,7 +60,7 @@ public interface LecturerApi {
     )
     @ApiResponse(responseCode = "200", description = "Lecturer updated successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer not found")
-    AppUserResponse update(@PathVariable UUID uuid, @Valid @RequestBody AppUserRequest.Update request);
+    AppUserResponse updateLecturer(@PathVariable UUID uuid, @Valid @RequestBody AppUserRequest.Update request);
 
     @GetMapping("/by-cognito-sub/{cognitoSub}")
     @Operation(
@@ -70,7 +70,7 @@ public interface LecturerApi {
     )
     @ApiResponse(responseCode = "200", description = "Lecturer retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer not found")
-    AppUserResponse findByCognitoSub(@PathVariable String cognitoSub);
+    AppUserResponse findLecturerByCognitoSub(@PathVariable String cognitoSub);
 
     // ── Student blocking (lecturer) ─────────────────────────────────────
 

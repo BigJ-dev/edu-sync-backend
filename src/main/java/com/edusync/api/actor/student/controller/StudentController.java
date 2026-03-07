@@ -20,32 +20,32 @@ public class StudentController implements StudentApi {
     private final StudentService service;
 
     @Override
-    public StudentResponse create(StudentRequest.Create request) {
-        return service.create(request);
+    public StudentResponse createStudent(StudentRequest.Create request) {
+        return service.createStudent(request);
     }
 
     @Override
-    public Page<StudentResponse> findAll(Boolean active, String search, Pageable pageable) {
-        return service.findAll(active, search, pageable);
+    public Page<StudentResponse> findAllStudents(Boolean active, String search, Pageable pageable) {
+        return service.findAllStudents(active, search, pageable);
     }
 
     @Override
-    public StudentResponse findByUuid(UUID uuid) {
-        return service.findByUuid(uuid);
+    public StudentResponse findStudentByUuid(UUID uuid) {
+        return service.findStudentByUuid(uuid);
     }
 
     @Override
-    public StudentResponse update(UUID uuid, StudentRequest.Update request) {
-        return service.update(uuid, request);
+    public StudentResponse updateStudent(UUID uuid, StudentRequest.Update request) {
+        return service.updateStudent(uuid, request);
     }
 
     @Override
-    public StudentResponse findByCognitoSub(String cognitoSub) {
-        return service.findByCognitoSub(cognitoSub);
+    public StudentResponse findStudentByCognitoSub(String cognitoSub) {
+        return service.findStudentByCognitoSub(cognitoSub);
     }
 
     @Override
-    public StudentResponse updateProfileImage(UUID uuid, StudentRequest.ProfileImage request) {
-        return service.updateProfileImage(uuid, request);
+    public StudentResponse updateStudentProfileImage(UUID uuid, StudentRequest.ProfileImage request) {
+        return service.updateStudentProfileImage(uuid, request);
     }
 }

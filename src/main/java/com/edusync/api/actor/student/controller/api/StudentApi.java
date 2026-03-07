@@ -27,7 +27,7 @@ public interface StudentApi {
     )
     @ApiResponse(responseCode = "201", description = "Student created successfully")
     @ApiResponse(responseCode = "409", description = "Email, Cognito identity, or student number already exists")
-    StudentResponse create(@Valid @RequestBody StudentRequest.Create request);
+    StudentResponse createStudent(@Valid @RequestBody StudentRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -36,7 +36,7 @@ public interface StudentApi {
                     "and searching by first name, last name, email, or student number."
     )
     @ApiResponse(responseCode = "200", description = "Students retrieved successfully")
-    Page<StudentResponse> findAll(
+    Page<StudentResponse> findAllStudents(
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) String search,
             Pageable pageable);
@@ -49,7 +49,7 @@ public interface StudentApi {
     )
     @ApiResponse(responseCode = "200", description = "Student retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Student not found")
-    StudentResponse findByUuid(@PathVariable UUID uuid);
+    StudentResponse findStudentByUuid(@PathVariable UUID uuid);
 
     @PutMapping("/{uuid}")
     @Operation(
@@ -59,7 +59,7 @@ public interface StudentApi {
     )
     @ApiResponse(responseCode = "200", description = "Student updated successfully")
     @ApiResponse(responseCode = "404", description = "Student not found")
-    StudentResponse update(@PathVariable UUID uuid, @Valid @RequestBody StudentRequest.Update request);
+    StudentResponse updateStudent(@PathVariable UUID uuid, @Valid @RequestBody StudentRequest.Update request);
 
     @GetMapping("/by-cognito-sub/{cognitoSub}")
     @Operation(
@@ -69,7 +69,7 @@ public interface StudentApi {
     )
     @ApiResponse(responseCode = "200", description = "Student retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Student not found")
-    StudentResponse findByCognitoSub(@PathVariable String cognitoSub);
+    StudentResponse findStudentByCognitoSub(@PathVariable String cognitoSub);
 
     @PatchMapping("/{uuid}/profile-image")
     @Operation(
@@ -79,5 +79,5 @@ public interface StudentApi {
     )
     @ApiResponse(responseCode = "200", description = "Profile image updated successfully")
     @ApiResponse(responseCode = "404", description = "Student not found")
-    StudentResponse updateProfileImage(@PathVariable UUID uuid, @Valid @RequestBody StudentRequest.ProfileImage request);
+    StudentResponse updateStudentProfileImage(@PathVariable UUID uuid, @Valid @RequestBody StudentRequest.ProfileImage request);
 }

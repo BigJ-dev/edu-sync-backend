@@ -26,7 +26,7 @@ public interface FocusModeApi {
     @ApiResponse(responseCode = "200", description = "Focus mode activated successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer, course, or module not found")
     @ApiResponse(responseCode = "400", description = "Invalid request")
-    FocusModeResponse activate(@Valid @RequestBody FocusModeRequest.Activate request);
+    FocusModeResponse activateFocusMode(@Valid @RequestBody FocusModeRequest.Activate request);
 
     @PostMapping("/deactivate")
     @Operation(
@@ -36,7 +36,7 @@ public interface FocusModeApi {
     )
     @ApiResponse(responseCode = "200", description = "Focus mode deactivated successfully")
     @ApiResponse(responseCode = "404", description = "Focus mode record not found")
-    FocusModeResponse deactivate(
+    FocusModeResponse deactivateFocusMode(
             @RequestParam UUID lecturerUuid,
             @RequestParam UUID courseUuid,
             @RequestParam(required = false) UUID moduleUuid);
@@ -48,7 +48,7 @@ public interface FocusModeApi {
     )
     @ApiResponse(responseCode = "200", description = "Focus modes retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer not found")
-    List<FocusModeResponse> findByLecturer(@PathVariable UUID lecturerUuid);
+    List<FocusModeResponse> findFocusModesByLecturer(@PathVariable UUID lecturerUuid);
 
     @GetMapping("/course/{courseUuid}")
     @Operation(
@@ -57,7 +57,7 @@ public interface FocusModeApi {
     )
     @ApiResponse(responseCode = "200", description = "Active focus modes retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Course not found")
-    List<FocusModeResponse> findActiveByCourse(@PathVariable UUID courseUuid);
+    List<FocusModeResponse> findActiveFocusModesByCourse(@PathVariable UUID courseUuid);
 
     @GetMapping("/check")
     @Operation(
@@ -67,7 +67,7 @@ public interface FocusModeApi {
     )
     @ApiResponse(responseCode = "200", description = "Focus mode status retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Lecturer, course, or module not found")
-    boolean isActive(
+    boolean isFocusModeActive(
             @RequestParam UUID lecturerUuid,
             @RequestParam UUID courseUuid,
             @RequestParam(required = false) UUID moduleUuid);

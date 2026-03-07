@@ -21,16 +21,16 @@ public class MessageController implements MessageApi {
 
     @Override
     public MessageResponse create(UUID threadUuid, MessageRequest.Create request) {
-        return service.addMessage(threadUuid, request);
+        return service.addMessageToThread(threadUuid, request);
     }
 
     @Override
     public List<MessageResponse> findByThread(UUID threadUuid) {
-        return service.findByThread(threadUuid);
+        return service.findAllMessagesByThread(threadUuid);
     }
 
     @Override
     public void markAsRead(UUID threadUuid, SenderType readerType, UUID readerUuid) {
-        service.markAsRead(threadUuid, readerType, readerUuid);
+        service.markMessagesAsRead(threadUuid, readerType, readerUuid);
     }
 }

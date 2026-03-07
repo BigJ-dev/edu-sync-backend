@@ -44,6 +44,9 @@ public class Student {
     @Column(length = 20)
     private String phone;
 
+    @Column(length = 255)
+    private String azureAdGuestId;
+
     @Column(length = 500)
     private String profileImageS3Key;
 

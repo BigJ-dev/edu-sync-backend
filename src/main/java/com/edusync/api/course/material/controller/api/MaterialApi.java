@@ -26,7 +26,7 @@ public interface MaterialApi {
     )
     @ApiResponse(responseCode = "201", description = "Material created successfully")
     @ApiResponse(responseCode = "404", description = "Module, session, or uploader not found")
-    MaterialResponse create(@PathVariable UUID moduleUuid, @Valid @RequestBody MaterialRequest.Create request);
+    MaterialResponse createMaterial(@PathVariable UUID moduleUuid, @Valid @RequestBody MaterialRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -36,7 +36,7 @@ public interface MaterialApi {
     )
     @ApiResponse(responseCode = "200", description = "Materials retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Module not found")
-    List<MaterialResponse> findAllByModule(
+    List<MaterialResponse> findAllMaterialsByModule(
             @PathVariable UUID moduleUuid,
             @RequestParam(required = false) MaterialType type,
             @RequestParam(required = false) Boolean visible,
@@ -49,7 +49,7 @@ public interface MaterialApi {
     )
     @ApiResponse(responseCode = "200", description = "Material retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Material not found")
-    MaterialResponse findByUuid(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid);
+    MaterialResponse findMaterialByUuid(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid);
 
     @PutMapping("/{materialUuid}")
     @Operation(
@@ -58,7 +58,7 @@ public interface MaterialApi {
     )
     @ApiResponse(responseCode = "200", description = "Material updated successfully")
     @ApiResponse(responseCode = "404", description = "Material not found")
-    MaterialResponse update(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid, @Valid @RequestBody MaterialRequest.Update request);
+    MaterialResponse updateMaterial(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid, @Valid @RequestBody MaterialRequest.Update request);
 
     @DeleteMapping("/{materialUuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -68,5 +68,5 @@ public interface MaterialApi {
     )
     @ApiResponse(responseCode = "204", description = "Material deleted successfully")
     @ApiResponse(responseCode = "404", description = "Material not found")
-    void delete(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid);
+    void deleteMaterial(@PathVariable UUID moduleUuid, @PathVariable UUID materialUuid);
 }

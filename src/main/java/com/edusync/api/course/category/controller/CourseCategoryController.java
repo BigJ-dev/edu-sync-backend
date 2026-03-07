@@ -20,51 +20,51 @@ public class CourseCategoryController implements CourseCategoryApi {
 
     @Override
     public CategoryResponse create(CategoryRequest.Create request) {
-        return service.create(request);
+        return service.createCourseCategory(request);
     }
 
     @Override
     public List<CategoryResponse> findAll(Boolean active, String search) {
-        return service.findAll(active, search);
+        return service.findAllCourseCategories(active, search);
     }
 
     @Override
     public List<CategoryResponse> findRoots() {
-        return service.findRoots();
+        return service.findRootCategories();
     }
 
     @Override
     public CategoryResponse findByUuid(UUID categoryUuid) {
-        return service.findByUuid(categoryUuid);
+        return service.findCourseCategoryByUuid(categoryUuid);
     }
 
     @Override
     public List<CategoryResponse> findChildren(UUID categoryUuid) {
-        return service.findChildren(categoryUuid);
+        return service.findChildCategories(categoryUuid);
     }
 
     @Override
     public CategoryResponse update(UUID categoryUuid, CategoryRequest.Update request) {
-        return service.update(categoryUuid, request);
+        return service.updateCourseCategory(categoryUuid, request);
     }
 
     @Override
     public void delete(UUID categoryUuid) {
-        service.delete(categoryUuid);
+        service.deleteCourseCategory(categoryUuid);
     }
 
     @Override
     public CategoryResponse assignCourse(UUID categoryUuid, CategoryRequest.AssignCourse request) {
-        return service.assignCourse(categoryUuid, request);
+        return service.assignCourseToCategory(categoryUuid, request);
     }
 
     @Override
     public void unassignCourse(UUID categoryUuid, UUID courseUuid) {
-        service.unassignCourse(categoryUuid, courseUuid);
+        service.unassignCourseFromCategory(categoryUuid, courseUuid);
     }
 
     @Override
     public List<CategoryResponse> findCourseCategories(UUID courseUuid) {
-        return service.findCourseCategories(courseUuid);
+        return service.findCategoriesByCourse(courseUuid);
     }
 }

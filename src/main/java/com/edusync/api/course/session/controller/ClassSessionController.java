@@ -22,26 +22,26 @@ public class ClassSessionController implements ClassSessionApi {
 
     @Override
     public ClassSessionResponse create(UUID moduleUuid, ClassSessionRequest.Create request) {
-        return service.create(moduleUuid, request);
+        return service.createClassSession(moduleUuid, request);
     }
 
     @Override
     public List<ClassSessionResponse> findAllByModule(UUID moduleUuid, ClassSessionStatus status, ClassSessionType sessionType, String search) {
-        return service.findAllByModule(moduleUuid, status, sessionType, search);
+        return service.findAllClassSessionsByModule(moduleUuid, status, sessionType, search);
     }
 
     @Override
     public ClassSessionResponse findByUuid(UUID moduleUuid, UUID classSessionUuid) {
-        return service.findByUuid(classSessionUuid);
+        return service.findClassSessionByUuid(classSessionUuid);
     }
 
     @Override
     public ClassSessionResponse update(UUID moduleUuid, UUID classSessionUuid, ClassSessionRequest.Update request) {
-        return service.update(classSessionUuid, request);
+        return service.updateClassSession(classSessionUuid, request);
     }
 
     @Override
     public ClassSessionResponse updateStatus(UUID moduleUuid, UUID classSessionUuid, ClassSessionRequest.UpdateStatus request) {
-        return service.updateStatus(classSessionUuid, request);
+        return service.updateClassSessionStatus(classSessionUuid, request);
     }
 }

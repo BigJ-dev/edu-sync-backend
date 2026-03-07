@@ -23,27 +23,27 @@ public class AssessmentController implements AssessmentApi {
 
     @Override
     public AssessmentResponse create(UUID moduleUuid, AssessmentRequest.Create request) {
-        return service.create(moduleUuid, request);
+        return service.createAssessment(moduleUuid, request);
     }
 
     @Override
     public List<AssessmentResponse> findAllByModule(UUID moduleUuid, AssessmentStatus status,
                                                      AssessmentType type, DeliveryMode mode, String search) {
-        return service.findAllByModule(moduleUuid, status, type, mode, search);
+        return service.findAllAssessmentsByModule(moduleUuid, status, type, mode, search);
     }
 
     @Override
     public AssessmentResponse findByUuid(UUID moduleUuid, UUID assessmentUuid) {
-        return service.findByUuid(assessmentUuid);
+        return service.findAssessmentByUuid(assessmentUuid);
     }
 
     @Override
     public AssessmentResponse update(UUID moduleUuid, UUID assessmentUuid, AssessmentRequest.Update request) {
-        return service.update(assessmentUuid, request);
+        return service.updateAssessment(assessmentUuid, request);
     }
 
     @Override
     public AssessmentResponse updateStatus(UUID moduleUuid, UUID assessmentUuid, AssessmentRequest.UpdateStatus request) {
-        return service.updateStatus(assessmentUuid, request);
+        return service.updateAssessmentStatus(assessmentUuid, request);
     }
 }

@@ -3,7 +3,6 @@ package com.edusync.api.notification.controller;
 import com.edusync.api.notification.controller.api.NotificationApi;
 import com.edusync.api.notification.dto.NotificationRequest;
 import com.edusync.api.notification.dto.NotificationResponse;
-import com.edusync.api.notification.enums.NotificationType;
 import com.edusync.api.notification.enums.RecipientType;
 import com.edusync.api.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -21,39 +20,37 @@ public class NotificationController implements NotificationApi {
     private final NotificationService service;
 
     @Override
-    public NotificationResponse create(NotificationRequest.Create request) {
-        return service.create(request);
+    public NotificationResponse createNotification(NotificationRequest.Create request) {
+        return service.createNotification(request);
     }
 
     @Override
-    public List<NotificationResponse> findAll(RecipientType recipientType, Long recipientId,
-                                              NotificationType notificationType, UUID courseUuid,
-                                              Boolean unreadOnly) {
-        return service.findAll(recipientType, recipientId, notificationType, courseUuid, unreadOnly);
+    public List<NotificationResponse> findAllNotifications(NotificationRequest.Filter filter) {
+        return service.findAllNotifications(filter);
     }
 
     @Override
-    public long countUnread(RecipientType recipientType, Long recipientId) {
-        return service.countUnread(recipientType, recipientId);
+    public long countUnreadNotifications(RecipientType recipientType, Long recipientId) {
+        return service.countUnreadNotifications(recipientType, recipientId);
     }
 
     @Override
-    public NotificationResponse findByUuid(UUID notificationUuid) {
-        return service.findByUuid(notificationUuid);
+    public NotificationResponse findNotificationByUuid(UUID notificationUuid) {
+        return service.findNotificationByUuid(notificationUuid);
     }
 
     @Override
-    public NotificationResponse markAsRead(UUID notificationUuid) {
-        return service.markAsRead(notificationUuid);
+    public NotificationResponse markNotificationAsRead(UUID notificationUuid) {
+        return service.markNotificationAsRead(notificationUuid);
     }
 
     @Override
-    public void markAllAsRead(RecipientType recipientType, Long recipientId) {
-        service.markAllAsRead(recipientType, recipientId);
+    public void markAllNotificationsAsRead(RecipientType recipientType, Long recipientId) {
+        service.markAllNotificationsAsRead(recipientType, recipientId);
     }
 
     @Override
-    public NotificationResponse dismiss(UUID notificationUuid) {
-        return service.dismiss(notificationUuid);
+    public NotificationResponse dismissNotification(UUID notificationUuid) {
+        return service.dismissNotification(notificationUuid);
     }
 }

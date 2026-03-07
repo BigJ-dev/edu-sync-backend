@@ -21,26 +21,26 @@ public class ModuleController implements ModuleApi {
 
     @Override
     public ModuleResponse create(UUID courseUuid, ModuleRequest.Create request) {
-        return service.create(courseUuid, request);
+        return service.createModule(courseUuid, request);
     }
 
     @Override
     public List<ModuleResponse> findAllByCourse(UUID courseUuid, ModuleStatus status, String search) {
-        return service.findAllByCourse(courseUuid, status, search);
+        return service.findAllModulesByCourse(courseUuid, status, search);
     }
 
     @Override
     public ModuleResponse findByUuid(UUID courseUuid, UUID moduleUuid) {
-        return service.findByUuid(moduleUuid);
+        return service.findModuleByUuid(moduleUuid);
     }
 
     @Override
     public ModuleResponse update(UUID courseUuid, UUID moduleUuid, ModuleRequest.Update request) {
-        return service.update(moduleUuid, request);
+        return service.updateModule(moduleUuid, request);
     }
 
     @Override
     public ModuleResponse updateStatus(UUID courseUuid, UUID moduleUuid, ModuleRequest.UpdateStatus request) {
-        return service.updateStatus(moduleUuid, request);
+        return service.updateModuleStatus(moduleUuid, request);
     }
 }

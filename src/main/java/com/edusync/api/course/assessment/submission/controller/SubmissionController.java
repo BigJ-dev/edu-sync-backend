@@ -21,26 +21,26 @@ public class SubmissionController implements SubmissionApi {
 
     @Override
     public SubmissionResponse submit(UUID assessmentUuid, SubmissionRequest.Submit request) {
-        return service.submit(assessmentUuid, request);
+        return service.submitAssessment(assessmentUuid, request);
     }
 
     @Override
     public List<SubmissionResponse> findAllByAssessment(UUID assessmentUuid, SubmissionStatus status, Boolean late) {
-        return service.findAllByAssessment(assessmentUuid, status, late);
+        return service.findAllSubmissionsByAssessment(assessmentUuid, status, late);
     }
 
     @Override
     public SubmissionResponse findByUuid(UUID assessmentUuid, UUID submissionUuid) {
-        return service.findByUuid(submissionUuid);
+        return service.findSubmissionByUuid(submissionUuid);
     }
 
     @Override
     public SubmissionResponse grade(UUID assessmentUuid, UUID submissionUuid, SubmissionRequest.Grade request) {
-        return service.grade(submissionUuid, request);
+        return service.gradeSubmission(submissionUuid, request);
     }
 
     @Override
     public SubmissionResponse returnForResubmission(UUID assessmentUuid, UUID submissionUuid, SubmissionRequest.Return request) {
-        return service.returnForResubmission(submissionUuid, request);
+        return service.returnSubmissionForResubmission(submissionUuid, request);
     }
 }

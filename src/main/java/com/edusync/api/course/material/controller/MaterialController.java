@@ -20,27 +20,27 @@ public class MaterialController implements MaterialApi {
     private final MaterialService service;
 
     @Override
-    public MaterialResponse create(UUID moduleUuid, MaterialRequest.Create request) {
-        return service.create(moduleUuid, request);
+    public MaterialResponse createMaterial(UUID moduleUuid, MaterialRequest.Create request) {
+        return service.createMaterial(moduleUuid, request);
     }
 
     @Override
-    public List<MaterialResponse> findAllByModule(UUID moduleUuid, MaterialType type, Boolean visible, String search) {
-        return service.findAllByModule(moduleUuid, type, visible, search);
+    public List<MaterialResponse> findAllMaterialsByModule(UUID moduleUuid, MaterialType type, Boolean visible, String search) {
+        return service.findAllMaterialsByModule(moduleUuid, type, visible, search);
     }
 
     @Override
-    public MaterialResponse findByUuid(UUID moduleUuid, UUID materialUuid) {
-        return service.findByUuid(materialUuid);
+    public MaterialResponse findMaterialByUuid(UUID moduleUuid, UUID materialUuid) {
+        return service.findMaterialByUuid(materialUuid);
     }
 
     @Override
-    public MaterialResponse update(UUID moduleUuid, UUID materialUuid, MaterialRequest.Update request) {
-        return service.update(materialUuid, request);
+    public MaterialResponse updateMaterial(UUID moduleUuid, UUID materialUuid, MaterialRequest.Update request) {
+        return service.updateMaterial(materialUuid, request);
     }
 
     @Override
-    public void delete(UUID moduleUuid, UUID materialUuid) {
-        service.delete(materialUuid);
+    public void deleteMaterial(UUID moduleUuid, UUID materialUuid) {
+        service.deleteMaterial(materialUuid);
     }
 }

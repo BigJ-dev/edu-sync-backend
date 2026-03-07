@@ -23,26 +23,26 @@ public class BroadcastController implements BroadcastApi {
 
     @Override
     public BroadcastResponse create(BroadcastRequest.Create request) {
-        return service.create(request);
+        return service.createBroadcast(request);
     }
 
     @Override
     public List<BroadcastResponse> findAll(UUID courseUuid, BroadcastTarget targetType, BroadcastPriority priority, String search) {
-        return service.findAll(courseUuid, targetType, priority, search);
+        return service.findAllBroadcasts(courseUuid, targetType, priority, search);
     }
 
     @Override
     public BroadcastResponse findByUuid(UUID broadcastUuid) {
-        return service.findByUuid(broadcastUuid);
+        return service.findBroadcastByUuid(broadcastUuid);
     }
 
     @Override
     public List<BroadcastRecipientResponse> findRecipients(UUID broadcastUuid) {
-        return service.findRecipients(broadcastUuid);
+        return service.findBroadcastRecipients(broadcastUuid);
     }
 
     @Override
     public BroadcastRecipientResponse markAsRead(UUID broadcastUuid, UUID studentUuid) {
-        return service.markAsRead(broadcastUuid, studentUuid);
+        return service.markBroadcastAsRead(broadcastUuid, studentUuid);
     }
 }

@@ -19,27 +19,27 @@ public class FocusModeController implements FocusModeApi {
     private final FocusModeService service;
 
     @Override
-    public FocusModeResponse activate(FocusModeRequest.Activate request) {
-        return service.activate(request);
+    public FocusModeResponse activateFocusMode(FocusModeRequest.Activate request) {
+        return service.activateFocusMode(request);
     }
 
     @Override
-    public FocusModeResponse deactivate(UUID lecturerUuid, UUID courseUuid, UUID moduleUuid) {
-        return service.deactivate(lecturerUuid, courseUuid, moduleUuid);
+    public FocusModeResponse deactivateFocusMode(UUID lecturerUuid, UUID courseUuid, UUID moduleUuid) {
+        return service.deactivateFocusMode(lecturerUuid, courseUuid, moduleUuid);
     }
 
     @Override
-    public List<FocusModeResponse> findByLecturer(UUID lecturerUuid) {
-        return service.findByLecturer(lecturerUuid);
+    public List<FocusModeResponse> findFocusModesByLecturer(UUID lecturerUuid) {
+        return service.findFocusModesByLecturer(lecturerUuid);
     }
 
     @Override
-    public List<FocusModeResponse> findActiveByCourse(UUID courseUuid) {
-        return service.findActiveByCourse(courseUuid);
+    public List<FocusModeResponse> findActiveFocusModesByCourse(UUID courseUuid) {
+        return service.findActiveFocusModesByCourse(courseUuid);
     }
 
     @Override
-    public boolean isActive(UUID lecturerUuid, UUID courseUuid, UUID moduleUuid) {
-        return service.isActive(lecturerUuid, courseUuid, moduleUuid);
+    public boolean isFocusModeActive(UUID lecturerUuid, UUID courseUuid, UUID moduleUuid) {
+        return service.isFocusModeActive(lecturerUuid, courseUuid, moduleUuid);
     }
 }

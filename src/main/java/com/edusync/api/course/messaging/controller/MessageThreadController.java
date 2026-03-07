@@ -22,26 +22,26 @@ public class MessageThreadController implements MessageThreadApi {
 
     @Override
     public ThreadResponse create(UUID courseUuid, ThreadRequest.Create request) {
-        return service.createThread(request);
+        return service.createMessageThread(request);
     }
 
     @Override
     public List<ThreadResponse> findAll(UUID courseUuid, ThreadStatus status, ThreadPriority priority, Boolean escalated, String search) {
-        return service.findAll(courseUuid, status, priority, escalated, search);
+        return service.findAllMessageThreads(courseUuid, status, priority, escalated, search);
     }
 
     @Override
     public ThreadResponse findByUuid(UUID courseUuid, UUID threadUuid) {
-        return service.findByUuid(threadUuid);
+        return service.findMessageThreadByUuid(threadUuid);
     }
 
     @Override
     public ThreadResponse updateStatus(UUID courseUuid, UUID threadUuid, ThreadRequest.UpdateStatus request) {
-        return service.updateStatus(threadUuid, request);
+        return service.updateMessageThreadStatus(threadUuid, request);
     }
 
     @Override
     public ThreadResponse escalate(UUID courseUuid, UUID threadUuid, UUID escalatedByUuid) {
-        return service.escalate(threadUuid, escalatedByUuid);
+        return service.escalateMessageThread(threadUuid, escalatedByUuid);
     }
 }

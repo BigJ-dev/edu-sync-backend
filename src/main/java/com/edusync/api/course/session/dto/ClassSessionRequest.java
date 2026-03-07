@@ -37,6 +37,8 @@ public sealed interface ClassSessionRequest {
             @NotNull(message = _SESSION_LECTURER_REQUIRED)
             UUID lecturerUuid,
 
+            UUID groupUuid,
+
             String teamsMeetingId,
             String teamsJoinUrl,
 
@@ -62,6 +64,8 @@ public sealed interface ClassSessionRequest {
 
             @NotNull(message = _SESSION_SCHEDULED_END_REQUIRED)
             Instant scheduledEnd,
+
+            UUID groupUuid,
 
             String teamsMeetingId,
             String teamsJoinUrl,

@@ -20,21 +20,21 @@ public class RubricCriteriaController implements RubricCriteriaApi {
 
     @Override
     public RubricCriteriaResponse create(UUID assessmentUuid, RubricCriteriaRequest.Create request) {
-        return service.create(assessmentUuid, request);
+        return service.createRubricCriteria(assessmentUuid, request);
     }
 
     @Override
     public List<RubricCriteriaResponse> findAllByAssessment(UUID assessmentUuid) {
-        return service.findAllByAssessment(assessmentUuid);
+        return service.findAllRubricCriteriaByAssessment(assessmentUuid);
     }
 
     @Override
     public RubricCriteriaResponse update(UUID assessmentUuid, UUID criteriaUuid, RubricCriteriaRequest.Update request) {
-        return service.update(criteriaUuid, request);
+        return service.updateRubricCriteria(criteriaUuid, request);
     }
 
     @Override
     public void delete(UUID assessmentUuid, UUID criteriaUuid) {
-        service.delete(criteriaUuid);
+        service.deleteRubricCriteria(criteriaUuid);
     }
 }

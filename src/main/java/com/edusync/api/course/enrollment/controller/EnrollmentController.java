@@ -22,26 +22,26 @@ public class EnrollmentController implements EnrollmentApi {
 
     @Override
     public EnrollmentResponse enroll(UUID courseUuid, EnrollmentRequest.Enroll request) {
-        return service.enroll(courseUuid, request);
+        return service.enrollStudentInCourse(courseUuid, request);
     }
 
     @Override
     public Page<EnrollmentResponse> findAllByCourse(UUID courseUuid, EnrollmentStatus status, Boolean blocked, Pageable pageable) {
-        return service.findAllByCourse(courseUuid, status, blocked, pageable);
+        return service.findAllEnrollmentsByCourse(courseUuid, status, blocked, pageable);
     }
 
     @Override
     public EnrollmentResponse withdraw(UUID courseUuid, UUID studentUuid, EnrollmentRequest.Withdraw request) {
-        return service.withdraw(courseUuid, studentUuid, request);
+        return service.withdrawStudentFromCourse(courseUuid, studentUuid, request);
     }
 
     @Override
     public EnrollmentResponse block(UUID courseUuid, UUID studentUuid, EnrollmentRequest.Block request) {
-        return service.block(courseUuid, studentUuid, request, 1L);
+        return service.blockEnrollment(courseUuid, studentUuid, request, 1L);
     }
 
     @Override
     public EnrollmentResponse unblock(UUID courseUuid, UUID studentUuid) {
-        return service.unblock(courseUuid, studentUuid);
+        return service.unblockEnrollment(courseUuid, studentUuid);
     }
 }

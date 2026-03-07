@@ -2,7 +2,6 @@ package com.edusync.api.notification.controller.api;
 
 import com.edusync.api.notification.dto.NotificationRequest;
 import com.edusync.api.notification.dto.NotificationResponse;
-import com.edusync.api.notification.enums.NotificationType;
 import com.edusync.api.notification.enums.RecipientType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,7 +25,7 @@ public interface NotificationApi {
     )
     @ApiResponse(responseCode = "201", description = "Notification created successfully")
     @ApiResponse(responseCode = "404", description = "Course or module not found")
-    NotificationResponse create(@Valid @RequestBody NotificationRequest.Create request);
+    NotificationResponse createNotification(@Valid @RequestBody NotificationRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -34,12 +33,7 @@ public interface NotificationApi {
             description = "Returns notifications filtered by recipient, type, course, and read status."
     )
     @ApiResponse(responseCode = "200", description = "Notifications retrieved successfully")
-    List<NotificationResponse> findAll(
-            @RequestParam(required = false) RecipientType recipientType,
-            @RequestParam(required = false) Long recipientId,
-            @RequestParam(required = false) NotificationType notificationType,
-            @RequestParam(required = false) UUID courseUuid,
-            @RequestParam(required = false) Boolean unreadOnly);
+    List<NotificationResponse> findAllNotifications(NotificationRequest.Filter filter);
 
     @GetMapping("/count")
     @Operation(
@@ -47,7 +41,7 @@ public interface NotificationApi {
             description = "Returns the count of unread notifications for a given recipient."
     )
     @ApiResponse(responseCode = "200", description = "Unread count retrieved successfully")
-    long countUnread(
+    long countUnreadNotifications(
             @RequestParam RecipientType recipientType,
             @RequestParam Long recipientId);
 
@@ -58,7 +52,7 @@ public interface NotificationApi {
     )
     @ApiResponse(responseCode = "200", description = "Notification retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Notification not found")
-    NotificationResponse findByUuid(@PathVariable UUID notificationUuid);
+    NotificationResponse findNotificationByUuid(@PathVariable UUID notificationUuid);
 
     @PatchMapping("/{notificationUuid}/read")
     @Operation(
@@ -67,7 +61,7 @@ public interface NotificationApi {
     )
     @ApiResponse(responseCode = "200", description = "Notification marked as read")
     @ApiResponse(responseCode = "404", description = "Notification not found")
-    NotificationResponse markAsRead(@PathVariable UUID notificationUuid);
+    NotificationResponse markNotificationAsRead(@PathVariable UUID notificationUuid);
 
     @PatchMapping("/read-all")
     @Operation(
@@ -76,7 +70,7 @@ public interface NotificationApi {
     )
     @ApiResponse(responseCode = "204", description = "All notifications marked as read")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void markAllAsRead(
+    void markAllNotificationsAsRead(
             @RequestParam RecipientType recipientType,
             @RequestParam Long recipientId);
 
@@ -87,5 +81,5 @@ public interface NotificationApi {
     )
     @ApiResponse(responseCode = "200", description = "Notification dismissed")
     @ApiResponse(responseCode = "404", description = "Notification not found")
-    NotificationResponse dismiss(@PathVariable UUID notificationUuid);
+    NotificationResponse dismissNotification(@PathVariable UUID notificationUuid);
 }

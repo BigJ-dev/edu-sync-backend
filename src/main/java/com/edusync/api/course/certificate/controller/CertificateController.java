@@ -20,32 +20,32 @@ public class CertificateController implements CertificateApi {
     private final CertificateService service;
 
     @Override
-    public CertificateResponse issue(CertificateRequest.Issue request) {
-        return service.issue(request);
+    public CertificateResponse issueCertificate(CertificateRequest.Issue request) {
+        return service.issueCertificate(request);
     }
 
     @Override
-    public List<CertificateResponse> findAll(UUID courseUuid, CertificateStatus status, String search) {
-        return service.findAll(courseUuid, status, search);
+    public List<CertificateResponse> findAllCertificates(UUID courseUuid, CertificateStatus status, String search) {
+        return service.findAllCertificates(courseUuid, status, search);
     }
 
     @Override
-    public CertificateResponse findByUuid(UUID certificateUuid) {
-        return service.findByUuid(certificateUuid);
+    public CertificateResponse findCertificateByUuid(UUID certificateUuid) {
+        return service.findCertificateByUuid(certificateUuid);
     }
 
     @Override
-    public CertificateResponse verify(String verificationCode) {
-        return service.verify(verificationCode);
+    public CertificateResponse verifyCertificate(String verificationCode) {
+        return service.verifyCertificate(verificationCode);
     }
 
     @Override
-    public CertificateResponse revoke(UUID certificateUuid, CertificateRequest.Revoke request) {
-        return service.revoke(certificateUuid, request);
+    public CertificateResponse revokeCertificate(UUID certificateUuid, CertificateRequest.Revoke request) {
+        return service.revokeCertificate(certificateUuid, request);
     }
 
     @Override
-    public List<CertificateResponse> findByStudent(UUID studentUuid) {
-        return service.findByStudent(studentUuid);
+    public List<CertificateResponse> findCertificatesByStudent(UUID studentUuid) {
+        return service.findCertificatesByStudent(studentUuid);
     }
 }

@@ -1,6 +1,7 @@
 package com.edusync.api.course.session.model;
 
 import com.edusync.api.actor.common.model.AppUser;
+import com.edusync.api.course.group.model.CourseGroup;
 import com.edusync.api.course.session.enums.ClassSessionStatus;
 import com.edusync.api.course.session.enums.ClassSessionType;
 import com.edusync.api.course.module.model.CourseModule;
@@ -66,6 +67,10 @@ public class ClassSession {
 
     @Column(length = 500)
     private String recordingS3Key;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private CourseGroup group;
 
     @Column(length = 500)
     private String venue;

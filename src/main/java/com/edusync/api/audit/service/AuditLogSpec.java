@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import static com.edusync.api.audit.enums.AuditField.*;
 
@@ -15,30 +16,30 @@ import static com.edusync.api.audit.enums.AuditField.*;
 public final class AuditLogSpec {
 
     public static Specification<AuditLog> hasAction(AuditAction action) {
-        return action == null ? null : (root, query, cb) -> cb.equal(root.get(ACTION.getName()), action);
+        return Objects.isNull(action) ? null : (root, query, cb) -> cb.equal(root.get(ACTION.getName()), action);
     }
 
     public static Specification<AuditLog> hasEntityType(String entityType) {
-        return entityType == null ? null : (root, query, cb) -> cb.equal(root.get(ENTITY_TYPE.getName()), entityType);
+        return Objects.isNull(entityType) ? null : (root, query, cb) -> cb.equal(root.get(ENTITY_TYPE.getName()), entityType);
     }
 
     public static Specification<AuditLog> hasEntityId(Long entityId) {
-        return entityId == null ? null : (root, query, cb) -> cb.equal(root.get(ENTITY_ID.getName()), entityId);
+        return Objects.isNull(entityId) ? null : (root, query, cb) -> cb.equal(root.get(ENTITY_ID.getName()), entityId);
     }
 
     public static Specification<AuditLog> hasPerformedByType(PerformerType performedByType) {
-        return performedByType == null ? null : (root, query, cb) -> cb.equal(root.get(PERFORMED_BY_TYPE.getName()), performedByType);
+        return Objects.isNull(performedByType) ? null : (root, query, cb) -> cb.equal(root.get(PERFORMED_BY_TYPE.getName()), performedByType);
     }
 
     public static Specification<AuditLog> hasCourseId(Long courseId) {
-        return courseId == null ? null : (root, query, cb) -> cb.equal(root.get(COURSE_ID.getName()), courseId);
+        return Objects.isNull(courseId) ? null : (root, query, cb) -> cb.equal(root.get(COURSE_ID.getName()), courseId);
     }
 
     public static Specification<AuditLog> createdAfter(Instant from) {
-        return from == null ? null : (root, query, cb) -> cb.greaterThanOrEqualTo(root.get(CREATED_AT.getName()), from);
+        return Objects.isNull(from) ? null : (root, query, cb) -> cb.greaterThanOrEqualTo(root.get(CREATED_AT.getName()), from);
     }
 
     public static Specification<AuditLog> createdBefore(Instant to) {
-        return to == null ? null : (root, query, cb) -> cb.lessThanOrEqualTo(root.get(CREATED_AT.getName()), to);
+        return Objects.isNull(to) ? null : (root, query, cb) -> cb.lessThanOrEqualTo(root.get(CREATED_AT.getName()), to);
     }
 }

@@ -21,31 +21,31 @@ public class AttemptController implements AttemptApi {
 
     @Override
     public AttemptResponse startAttempt(UUID quizUuid, AttemptRequest.Start request) {
-        return service.startAttempt(quizUuid, request);
+        return service.startQuizAttempt(quizUuid, request);
     }
 
     @Override
     public List<AttemptResponse> findAttempts(UUID quizUuid, UUID studentUuid) {
-        return service.findAttemptsByQuizAndStudent(quizUuid, studentUuid);
+        return service.findQuizAttemptsByQuizAndStudent(quizUuid, studentUuid);
     }
 
     @Override
     public AttemptResponse findByUuid(UUID quizUuid, UUID attemptUuid) {
-        return service.findByUuid(attemptUuid);
+        return service.findQuizAttemptByUuid(attemptUuid);
     }
 
     @Override
     public AnswerResponse submitAnswer(UUID quizUuid, UUID attemptUuid, AttemptRequest.SubmitAnswer request) {
-        return service.submitAnswer(attemptUuid, request);
+        return service.submitQuizAnswer(attemptUuid, request);
     }
 
     @Override
     public AttemptResponse completeAttempt(UUID quizUuid, UUID attemptUuid) {
-        return service.completeAttempt(attemptUuid);
+        return service.completeQuizAttempt(attemptUuid);
     }
 
     @Override
     public List<AnswerResponse> findAnswers(UUID quizUuid, UUID attemptUuid) {
-        return service.findAnswers(attemptUuid);
+        return service.findQuizAttemptAnswers(attemptUuid);
     }
 }

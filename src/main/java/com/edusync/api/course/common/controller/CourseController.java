@@ -22,26 +22,26 @@ public class CourseController implements CourseApi {
 
     @Override
     public CourseResponse create(CourseRequest.Create request) {
-        return service.create(request);
+        return service.createCourse(request);
     }
 
     @Override
     public Page<CourseResponse> findAll(CourseStatus status, String search, Pageable pageable) {
-        return service.findAll(status, search, pageable);
+        return service.findAllCourses(status, search, pageable);
     }
 
     @Override
     public CourseResponse findByUuid(UUID uuid) {
-        return service.findByUuid(uuid);
+        return service.findCourseByUuid(uuid);
     }
 
     @Override
     public CourseResponse update(UUID uuid, CourseRequest.Update request) {
-        return service.update(uuid, request);
+        return service.updateCourse(uuid, request);
     }
 
     @Override
     public CourseResponse updateStatus(UUID uuid, CourseRequest.UpdateStatus request) {
-        return service.updateStatus(uuid, request);
+        return service.updateCourseStatus(uuid, request);
     }
 }

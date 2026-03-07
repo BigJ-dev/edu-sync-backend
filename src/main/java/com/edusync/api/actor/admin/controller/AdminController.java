@@ -26,47 +26,47 @@ public class AdminController implements AdminApi {
     private final StudentService studentService;
 
     @Override
-    public AppUserResponse create(AppUserRequest.Create request) {
-        return adminService.create(request);
+    public AppUserResponse createAdmin(AppUserRequest.Create request) {
+        return adminService.createAdmin(request);
     }
 
     @Override
-    public Page<AppUserResponse> findAll(Boolean active, String search, Pageable pageable) {
-        return adminService.findAll(active, search, pageable);
+    public Page<AppUserResponse> findAllAdmins(Boolean active, String search, Pageable pageable) {
+        return adminService.findAllAdmins(active, search, pageable);
     }
 
     @Override
-    public AppUserResponse findByUuid(UUID uuid) {
-        return adminService.findByUuid(uuid);
+    public AppUserResponse findAdminByUuid(UUID uuid) {
+        return adminService.findAdminByUuid(uuid);
     }
 
     @Override
-    public AppUserResponse update(UUID uuid, AppUserRequest.Update request) {
-        return adminService.update(uuid, request);
+    public AppUserResponse updateAdmin(UUID uuid, AppUserRequest.Update request) {
+        return adminService.updateAdmin(uuid, request);
     }
 
     @Override
-    public AppUserResponse findByCognitoSub(String cognitoSub) {
-        return adminService.findByCognitoSub(cognitoSub);
+    public AppUserResponse findAdminByCognitoSub(String cognitoSub) {
+        return adminService.findAdminByCognitoSub(cognitoSub);
     }
 
     @Override
     public AppUserResponse blockLecturer(UUID uuid, AppUserRequest.Block request) {
-        return lecturerService.block(uuid, request, 1L);
+        return lecturerService.blockLecturer(uuid, request, 1L);
     }
 
     @Override
     public AppUserResponse unblockLecturer(UUID uuid) {
-        return lecturerService.unblock(uuid);
+        return lecturerService.unblockLecturer(uuid);
     }
 
     @Override
     public StudentResponse blockStudent(UUID uuid, StudentRequest.Block request) {
-        return studentService.block(uuid, request, 1L);
+        return studentService.blockStudent(uuid, request, 1L);
     }
 
     @Override
     public StudentResponse unblockStudent(UUID uuid) {
-        return studentService.unblock(uuid);
+        return studentService.unblockStudent(uuid);
     }
 }

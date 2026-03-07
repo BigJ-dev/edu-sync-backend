@@ -21,31 +21,31 @@ public class QuestionController implements QuestionApi {
 
     @Override
     public QuestionResponse addQuestion(UUID quizUuid, QuestionRequest.Create request) {
-        return service.addQuestion(quizUuid, request);
+        return service.addQuizQuestion(quizUuid, request);
     }
 
     @Override
     public List<QuestionResponse> findByQuiz(UUID quizUuid) {
-        return service.findByQuiz(quizUuid);
+        return service.findAllQuestionsByQuiz(quizUuid);
     }
 
     @Override
     public QuestionResponse findByUuid(UUID quizUuid, UUID questionUuid) {
-        return service.findByUuid(questionUuid);
+        return service.findQuizQuestionByUuid(questionUuid);
     }
 
     @Override
     public QuestionResponse updateQuestion(UUID quizUuid, UUID questionUuid, QuestionRequest.Update request) {
-        return service.updateQuestion(questionUuid, request);
+        return service.updateQuizQuestion(questionUuid, request);
     }
 
     @Override
     public void deleteQuestion(UUID quizUuid, UUID questionUuid) {
-        service.deleteQuestion(questionUuid);
+        service.deleteQuizQuestion(questionUuid);
     }
 
     @Override
     public List<OptionResponse> replaceOptions(UUID quizUuid, UUID questionUuid, List<QuestionRequest.OptionCreate> options) {
-        return service.replaceOptions(questionUuid, options);
+        return service.replaceQuizQuestionOptions(questionUuid, options);
     }
 }

@@ -26,7 +26,7 @@ public interface AuditLogApi {
                     "what entity was affected, and any field-level changes."
     )
     @ApiResponse(responseCode = "201", description = "Audit log entry created successfully")
-    AuditLogResponse create(@Valid @RequestBody AuditLogRequest.Create request);
+    AuditLogResponse createAuditLog(@Valid @RequestBody AuditLogRequest.Create request);
 
     @GetMapping
     @Operation(
@@ -35,7 +35,7 @@ public interface AuditLogApi {
                     "course, and date range."
     )
     @ApiResponse(responseCode = "200", description = "Audit log entries retrieved successfully")
-    List<AuditLogResponse> findAll(
+    List<AuditLogResponse> findAllAuditLogs(
             @RequestParam(required = false) AuditAction action,
             @RequestParam(required = false) String entityType,
             @RequestParam(required = false) Long entityId,
@@ -51,5 +51,5 @@ public interface AuditLogApi {
     )
     @ApiResponse(responseCode = "200", description = "Audit log entry retrieved successfully")
     @ApiResponse(responseCode = "404", description = "Audit log entry not found")
-    AuditLogResponse findById(@PathVariable Long id);
+    AuditLogResponse findAuditLogById(@PathVariable Long id);
 }

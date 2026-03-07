@@ -21,46 +21,46 @@ public class CourseGroupController implements CourseGroupApi {
 
     @Override
     public GroupResponse create(UUID courseUuid, GroupRequest.Create request) {
-        return service.create(request);
+        return service.createCourseGroup(request);
     }
 
     @Override
     public List<GroupResponse> findAllByCourse(UUID courseUuid, String search) {
-        return service.findAllByCourse(courseUuid, search);
+        return service.findAllCourseGroupsByCourse(courseUuid, search);
     }
 
     @Override
     public GroupResponse findByUuid(UUID courseUuid, UUID groupUuid) {
-        return service.findByUuid(groupUuid);
+        return service.findCourseGroupByUuid(groupUuid);
     }
 
     @Override
     public GroupResponse update(UUID courseUuid, UUID groupUuid, GroupRequest.Update request) {
-        return service.update(groupUuid, request);
+        return service.updateCourseGroup(groupUuid, request);
     }
 
     @Override
     public void delete(UUID courseUuid, UUID groupUuid) {
-        service.delete(groupUuid);
+        service.deleteCourseGroup(groupUuid);
     }
 
     @Override
     public GroupMemberResponse addMember(UUID courseUuid, UUID groupUuid, GroupRequest.AddMember request) {
-        return service.addMember(groupUuid, request);
+        return service.addMemberToCourseGroup(groupUuid, request);
     }
 
     @Override
     public List<GroupMemberResponse> findMembers(UUID courseUuid, UUID groupUuid) {
-        return service.findMembers(groupUuid);
+        return service.findCourseGroupMembers(groupUuid);
     }
 
     @Override
     public void removeMember(UUID courseUuid, UUID groupUuid, UUID studentUuid) {
-        service.removeMember(groupUuid, studentUuid);
+        service.removeMemberFromCourseGroup(groupUuid, studentUuid);
     }
 
     @Override
     public GroupMemberResponse updateMemberRole(UUID courseUuid, UUID groupUuid, UUID studentUuid, GroupRequest.UpdateMemberRole request) {
-        return service.updateMemberRole(groupUuid, studentUuid, request);
+        return service.updateCourseGroupMemberRole(groupUuid, studentUuid, request);
     }
 }

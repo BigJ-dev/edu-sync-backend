@@ -21,16 +21,16 @@ public class AttendanceController implements AttendanceApi {
 
     @Override
     public AttendanceResponse record(UUID classSessionUuid, AttendanceRequest.Record request) {
-        return service.record(classSessionUuid, request);
+        return service.recordAttendance(classSessionUuid, request);
     }
 
     @Override
     public List<AttendanceResponse> findAllBySession(UUID classSessionUuid, AttendanceStatus status) {
-        return service.findAllBySession(classSessionUuid, status);
+        return service.findAllAttendanceBySession(classSessionUuid, status);
     }
 
     @Override
     public AttendanceResponse override(UUID classSessionUuid, UUID studentUuid, AttendanceRequest.Override request) {
-        return service.override(classSessionUuid, studentUuid, request);
+        return service.overrideAttendance(classSessionUuid, studentUuid, request);
     }
 }

@@ -21,19 +21,19 @@ public class AuditLogController implements AuditLogApi {
     private final AuditLogService service;
 
     @Override
-    public AuditLogResponse create(AuditLogRequest.Create request) {
-        return service.log(request);
+    public AuditLogResponse createAuditLog(AuditLogRequest.Create request) {
+        return service.createAuditLog(request);
     }
 
     @Override
-    public List<AuditLogResponse> findAll(AuditAction action, String entityType, Long entityId,
+    public List<AuditLogResponse> findAllAuditLogs(AuditAction action, String entityType, Long entityId,
                                           PerformerType performedByType, Long courseId,
                                           Instant from, Instant to) {
-        return service.findAll(action, entityType, entityId, performedByType, courseId, from, to);
+        return service.findAllAuditLogs(action, entityType, entityId, performedByType, courseId, from, to);
     }
 
     @Override
-    public AuditLogResponse findById(Long id) {
-        return service.findById(id);
+    public AuditLogResponse findAuditLogById(Long id) {
+        return service.findAuditLogById(id);
     }
 }

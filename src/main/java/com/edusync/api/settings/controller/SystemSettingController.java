@@ -18,20 +18,20 @@ public class SystemSettingController implements SystemSettingApi {
     private final SystemSettingService service;
 
     @Override
-    public List<SettingResponse> findAll(String category) {
+    public List<SettingResponse> findAllSystemSettings(String category) {
         if (category != null && !category.isBlank()) {
-            return service.findByCategory(category);
+            return service.findSystemSettingsByCategory(category);
         }
-        return service.findAll();
+        return service.findAllSystemSettings();
     }
 
     @Override
-    public SettingResponse findByKey(String key) {
-        return service.findByKey(key);
+    public SettingResponse findSystemSettingByKey(String key) {
+        return service.findSystemSettingByKey(key);
     }
 
     @Override
-    public SettingResponse update(String key, SettingRequest.Update request) {
-        return service.update(key, request);
+    public SettingResponse updateSystemSetting(String key, SettingRequest.Update request) {
+        return service.updateSystemSetting(key, request);
     }
 }

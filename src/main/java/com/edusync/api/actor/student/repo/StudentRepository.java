@@ -18,4 +18,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
     boolean existsByCognitoSub(String cognitoSub);
 
     boolean existsByStudentNumber(String studentNumber);
+
+    Optional<Student> findByEmail(String email);
 }
