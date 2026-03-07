@@ -56,9 +56,17 @@ public class SpringDocConfig {
     }
 
     @Bean
+    GroupedOpenApi admissionApi() {
+        return GroupedOpenApi.builder()
+                .group("04. admissions")
+                .pathsToMatch("/admissions/**", "/admissions")
+                .build();
+    }
+
+    @Bean
     GroupedOpenApi studentApi() {
         return GroupedOpenApi.builder()
-                .group("04. students")
+                .group("05. students")
                 .pathsToMatch("/students/**")
                 .build();
     }
@@ -66,7 +74,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi courseApi() {
         return GroupedOpenApi.builder()
-                .group("05. courses")
+                .group("06. courses")
                 .pathsToMatch("/courses/**")
                 .build();
     }
@@ -74,7 +82,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi classSessionApi() {
         return GroupedOpenApi.builder()
-                .group("06. class-sessions")
+                .group("07. class-sessions")
                 .pathsToMatch("/modules/**/class-sessions/**", "/modules/**/class-sessions")
                 .build();
     }
@@ -82,7 +90,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi attendanceApi() {
         return GroupedOpenApi.builder()
-                .group("07. attendance")
+                .group("08. attendance")
                 .pathsToMatch("/class-sessions/**/attendance/**", "/class-sessions/**/attendance")
                 .build();
     }
@@ -90,7 +98,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi materialApi() {
         return GroupedOpenApi.builder()
-                .group("08. materials")
+                .group("09. materials")
                 .pathsToMatch("/modules/**/materials/**", "/modules/**/materials")
                 .build();
     }
@@ -98,7 +106,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi assessmentApi() {
         return GroupedOpenApi.builder()
-                .group("09. assessments")
+                .group("10. assessments")
                 .pathsToMatch(
                         "/modules/**/assessments/**", "/modules/**/assessments",
                         "/assessments/**/rubric/**", "/assessments/**/rubric",
@@ -111,7 +119,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi broadcastApi() {
         return GroupedOpenApi.builder()
-                .group("10. broadcasts")
+                .group("11. broadcasts")
                 .pathsToMatch("/broadcasts/**", "/broadcasts")
                 .build();
     }
@@ -119,7 +127,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi messagingApi() {
         return GroupedOpenApi.builder()
-                .group("11. messaging")
+                .group("12. messaging")
                 .pathsToMatch(
                         "/courses/**/threads/**", "/courses/**/threads",
                         "/threads/**/messages/**", "/threads/**/messages"
@@ -130,7 +138,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi notificationApi() {
         return GroupedOpenApi.builder()
-                .group("12. notifications")
+                .group("13. notifications")
                 .pathsToMatch("/notifications/**", "/notifications")
                 .build();
     }
@@ -138,7 +146,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi quizApi() {
         return GroupedOpenApi.builder()
-                .group("13. quizzes")
+                .group("14. quizzes")
                 .pathsToMatch(
                         "/modules/**/quizzes/**", "/modules/**/quizzes",
                         "/quizzes/**/questions/**", "/quizzes/**/questions",
@@ -151,7 +159,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi groupApi() {
         return GroupedOpenApi.builder()
-                .group("14. student-groups")
+                .group("15. student-groups")
                 .pathsToMatch("/courses/**/groups/**", "/courses/**/groups")
                 .build();
     }
@@ -159,7 +167,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi categoryApi() {
         return GroupedOpenApi.builder()
-                .group("15. categories")
+                .group("16. categories")
                 .pathsToMatch("/categories/**", "/categories")
                 .build();
     }
@@ -167,7 +175,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi certificateApi() {
         return GroupedOpenApi.builder()
-                .group("16. certificates")
+                .group("17. certificates")
                 .pathsToMatch("/certificates/**", "/certificates")
                 .build();
     }
@@ -175,7 +183,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi focusModeApi() {
         return GroupedOpenApi.builder()
-                .group("17. focus-mode")
+                .group("18. focus-mode")
                 .pathsToMatch("/focus-mode/**", "/focus-mode")
                 .build();
     }
@@ -183,7 +191,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi auditLogApi() {
         return GroupedOpenApi.builder()
-                .group("18. audit-logs")
+                .group("19. audit-logs")
                 .pathsToMatch("/audit-logs/**", "/audit-logs")
                 .build();
     }
@@ -191,7 +199,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi settingsApi() {
         return GroupedOpenApi.builder()
-                .group("19. settings")
+                .group("20. settings")
                 .pathsToMatch("/settings/**", "/settings")
                 .build();
     }
@@ -199,7 +207,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi s3Api() {
         return GroupedOpenApi.builder()
-                .group("20. s3-storage")
+                .group("21. s3-storage")
                 .pathsToMatch("/s3/**", "/s3")
                 .build();
     }
@@ -207,7 +215,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi teamsApi() {
         return GroupedOpenApi.builder()
-                .group("21. teams")
+                .group("22. teams")
                 .pathsToMatch("/teams/**", "/teams")
                 .build();
     }

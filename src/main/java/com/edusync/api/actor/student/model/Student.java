@@ -26,7 +26,7 @@ public class Student {
     @Column(updatable = false, nullable = false)
     private UUID uuid;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String cognitoSub;
 
     @Column(unique = true, nullable = false, length = 50)

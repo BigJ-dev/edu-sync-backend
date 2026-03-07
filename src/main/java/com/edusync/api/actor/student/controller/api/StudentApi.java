@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Tag(name = "Students", description = "Endpoints for managing students. Students enroll in courses, access learning materials, and track their academic progress on the EduSync platform.")
+@Tag(name = "Students", description = "Endpoints for managing students. Students are typically created through the admissions process " +
+        "(see Admissions). Once approved, a student record is generated automatically. " +
+        "These endpoints manage existing student profiles, enrollments, and academic progress.")
 @RequestMapping("/students")
 public interface StudentApi {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(
-            summary = "Register a new student",
-            description = "Creates a new student account linked to an existing AWS Cognito identity. " +
-                    "Used during onboarding after the student has been registered in Cognito. " +
-                    "Requires a unique student number, email, and Cognito subject."
+            summary = "Register a new student manually",
+            description = "Creates a new student account directly, bypassing the admissions process. " +
+                    "Used for manual onboarding or linking an existing AWS Cognito identity. " +
+                    "For the standard flow, use the Admissions endpoints to submit and approve an application."
     )
     @ApiResponse(responseCode = "201", description = "Student created successfully")
     @ApiResponse(responseCode = "409", description = "Email, Cognito identity, or student number already exists")
