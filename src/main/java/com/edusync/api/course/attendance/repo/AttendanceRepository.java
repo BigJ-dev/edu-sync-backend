@@ -16,4 +16,10 @@ public interface AttendanceRepository extends JpaRepository<AttendanceRecord, Lo
     List<AttendanceRecord> findByClassSessionId(Long classSessionId);
 
     List<AttendanceRecord> findByClassSessionIdIn(List<Long> classSessionIds);
+
+    List<AttendanceRecord> findByStudentIdAndCourseId(Long studentId, Long courseId);
+
+    long countByStudentIdAndCourseId(Long studentId, Long courseId);
+
+    long countByStudentIdAndCourseIdAndAttendanceStatus(Long studentId, Long courseId, com.edusync.api.course.attendance.enums.AttendanceStatus status);
 }

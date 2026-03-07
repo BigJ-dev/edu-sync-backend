@@ -19,4 +19,6 @@ public interface StudentApplicationRepository extends JpaRepository<StudentAppli
 
     @Query("SELECT COALESCE(MAX(s.id), 0) FROM Student s")
     long findMaxStudentId();
+
+    long countByStatus(com.edusync.api.admission.enums.ApplicationStatus status);
 }

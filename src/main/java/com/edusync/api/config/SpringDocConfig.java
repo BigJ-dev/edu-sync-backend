@@ -125,12 +125,12 @@ public class SpringDocConfig {
     }
 
     @Bean
-    GroupedOpenApi messagingApi() {
+    GroupedOpenApi supportApi() {
         return GroupedOpenApi.builder()
-                .group("12. messaging")
+                .group("12. support")
                 .pathsToMatch(
-                        "/courses/**/threads/**", "/courses/**/threads",
-                        "/threads/**/messages/**", "/threads/**/messages"
+                        "/courses/**/support-threads/**", "/courses/**/support-threads",
+                        "/support-threads/**/messages/**", "/support-threads/**/messages"
                 )
                 .build();
     }
@@ -197,9 +197,33 @@ public class SpringDocConfig {
     }
 
     @Bean
+    GroupedOpenApi dashboardApi() {
+        return GroupedOpenApi.builder()
+                .group("20. dashboard")
+                .pathsToMatch("/dashboard/**", "/dashboard")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi timetableApi() {
+        return GroupedOpenApi.builder()
+                .group("21. timetable")
+                .pathsToMatch("/timetable/**", "/timetable")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi transcriptApi() {
+        return GroupedOpenApi.builder()
+                .group("22. transcripts")
+                .pathsToMatch("/transcripts/**", "/transcripts")
+                .build();
+    }
+
+    @Bean
     GroupedOpenApi settingsApi() {
         return GroupedOpenApi.builder()
-                .group("20. settings")
+                .group("23. settings")
                 .pathsToMatch("/settings/**", "/settings")
                 .build();
     }
@@ -207,7 +231,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi s3Api() {
         return GroupedOpenApi.builder()
-                .group("21. s3-storage")
+                .group("24. s3-storage")
                 .pathsToMatch("/s3/**", "/s3")
                 .build();
     }
@@ -215,7 +239,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi smsApi() {
         return GroupedOpenApi.builder()
-                .group("22. sms")
+                .group("25. sms")
                 .pathsToMatch("/sms/**", "/sms")
                 .build();
     }
@@ -223,7 +247,7 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi emailApi() {
         return GroupedOpenApi.builder()
-                .group("23. email")
+                .group("26. email")
                 .pathsToMatch("/email/**", "/email")
                 .build();
     }
@@ -231,8 +255,24 @@ public class SpringDocConfig {
     @Bean
     GroupedOpenApi teamsApi() {
         return GroupedOpenApi.builder()
-                .group("24. teams")
+                .group("27. teams")
                 .pathsToMatch("/teams/**", "/teams")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi announcementApi() {
+        return GroupedOpenApi.builder()
+                .group("28. announcements")
+                .pathsToMatch("/announcements/**", "/announcements")
+                .build();
+    }
+
+    @Bean
+    GroupedOpenApi gradingApi() {
+        return GroupedOpenApi.builder()
+                .group("29. grading")
+                .pathsToMatch("/courses/**/grading/**")
                 .build();
     }
 }

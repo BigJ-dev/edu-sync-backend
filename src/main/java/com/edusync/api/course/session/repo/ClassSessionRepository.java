@@ -20,4 +20,10 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, Long
 
     @Query("SELECT cs FROM ClassSession cs WHERE cs.module.course.id = :courseId AND cs.scheduledStart >= :from AND cs.scheduledStart < :to")
     List<ClassSession> findByCourseIdAndScheduledStartBetween(Long courseId, Instant from, Instant to);
+
+    @Query("SELECT cs FROM ClassSession cs WHERE cs.module.course.id IN :courseIds AND cs.scheduledStart >= :from AND cs.scheduledStart < :to ORDER BY cs.scheduledStart")
+    List<ClassSession> findByCourseIdInAndScheduledStartBetween(List<Long> courseIds, Instant from, Instant to);
+
+    @Query("SELECT cs FROM ClassSession cs WHERE cs.lecturer.id = :lecturerId AND cs.scheduledStart >= :from AND cs.scheduledStart < :to ORDER BY cs.scheduledStart")
+    List<ClassSession> findByLecturerIdAndScheduledStartBetween(Long lecturerId, Instant from, Instant to);
 }

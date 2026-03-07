@@ -12,4 +12,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
     Optional<Course> findByUuid(UUID uuid);
 
     boolean existsByCode(String code);
+
+    java.util.List<Course> findByLecturerId(Long lecturerId);
 }

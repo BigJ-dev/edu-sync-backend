@@ -13,6 +13,9 @@ import com.edusync.api.admission.model.StudentApplication;
 import com.edusync.api.admission.repo.StudentApplicationRepository;
 import com.edusync.api.common.exception.ServiceException;
 import com.edusync.api.course.common.repo.CourseRepository;
+import com.edusync.api.course.enrollment.enums.EnrollmentStatus;
+import com.edusync.api.course.enrollment.model.CourseEnrollment;
+import com.edusync.api.course.enrollment.repo.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     private final StudentRepository studentRepository;
     private final AppUserRepository appUserRepository;
     private final CourseRepository courseRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @Override
     public ApplicationResponse submitApplication(ApplicationRequest.Submit request) {
@@ -147,6 +151,18 @@ public class AdmissionServiceImpl implements AdmissionService {
         application.setReviewedBy(reviewer);
         application.setReviewedAt(Instant.now());
         application.setStudent(savedStudent);
+
+        application.getCourseChoices().stream()
+                .filter(choice -> choice.getPriority() == 1)
+                .findFirst()
+                .ifPresent(firstChoice -> enrollmentRepository.save(
+                        CourseEnrollment.builder()
+                                .course(firstChoice.getCourse())
+                                .student(savedStudent)
+                                .status(EnrollmentStatus.ENROLLED)
+                                .enrolledAt(Instant.now())
+                                .blocked(false)
+                                .build()));
 
         return ApplicationResponse.from(applicationRepository.save(application));
     }

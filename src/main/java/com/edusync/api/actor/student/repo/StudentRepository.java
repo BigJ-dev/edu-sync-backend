@@ -20,4 +20,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
     boolean existsByStudentNumber(String studentNumber);
 
     Optional<Student> findByEmail(String email);
+
+    long countByActive(boolean active);
 }
