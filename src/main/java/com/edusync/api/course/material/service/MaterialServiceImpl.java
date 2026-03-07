@@ -10,7 +10,6 @@ import com.edusync.api.course.material.model.StudyMaterial;
 import com.edusync.api.course.material.repo.MaterialRepository;
 import com.edusync.api.course.module.model.CourseModule;
 import com.edusync.api.course.module.repo.ModuleRepository;
-import com.edusync.api.course.session.model.ClassSession;
 import com.edusync.api.course.session.repo.ClassSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +36,11 @@ public class MaterialServiceImpl implements MaterialService {
     public MaterialResponse createMaterial(UUID moduleUuid, MaterialRequest.Create request) {
         var module = findModule(moduleUuid);
         var uploadedBy = findAppUser(request.uploadedByUuid());
-        ClassSession session = null;
-        if (request.classSessionUuid() != null) {
-            session = classSessionRepository.findByUuid(request.classSessionUuid())
-                    .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Class session was not found"));
-        }
+
+        var session = Objects.nonNull(request.classSessionUuid())
+                ? classSessionRepository.findByUuid(request.classSessionUuid())
+                    .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Class session was not found"))
+                : null;
 
         var material = StudyMaterial.builder()
                 .module(module)
@@ -53,8 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
                 .fileName(request.fileName())
                 .fileSizeBytes(request.fileSizeBytes())
                 .mimeType(request.mimeType())
-                .sortOrder(request.sortOrder() != null ? request.sortOrder() : 0)
-                .visibleToStudents(request.visibleToStudents() != null ? request.visibleToStudents() : true)
+                .sortOrder(Objects.nonNull(request.sortOrder()) ? request.sortOrder() : 0)
+                .visibleToStudents(Objects.nonNull(request.visibleToStudents()) ? request.visibleToStudents() : true)
                 .build();
 
         return MaterialResponse.from(repository.save(material));
@@ -64,10 +65,16 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public List<MaterialResponse> findAllMaterialsByModule(UUID moduleUuid, MaterialType type, Boolean visible, String search) {
         var module = findModule(moduleUuid);
-        var spec = Specification.where(MaterialSpec.hasModuleId(module.getId()))
-                .and(MaterialSpec.hasMaterialType(type))
-                .and(MaterialSpec.isVisibleToStudents(visible))
-                .and(MaterialSpec.searchByTitle(search));
+
+        var spec = Stream.of(
+                        MaterialSpec.hasModuleId(module.getId()),
+                        MaterialSpec.hasMaterialType(type),
+                        MaterialSpec.isVisibleToStudents(visible),
+                        MaterialSpec.searchByTitle(search))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
+
         return repository.findAll(spec).stream().map(MaterialResponse::from).toList();
     }
 
@@ -87,8 +94,8 @@ public class MaterialServiceImpl implements MaterialService {
         material.setFileName(request.fileName());
         material.setFileSizeBytes(request.fileSizeBytes());
         material.setMimeType(request.mimeType());
-        if (request.sortOrder() != null) material.setSortOrder(request.sortOrder());
-        if (request.visibleToStudents() != null) material.setVisibleToStudents(request.visibleToStudents());
+        if (Objects.nonNull(request.sortOrder())) material.setSortOrder(request.sortOrder());
+        if (Objects.nonNull(request.visibleToStudents())) material.setVisibleToStudents(request.visibleToStudents());
         return MaterialResponse.from(repository.save(material));
     }
 

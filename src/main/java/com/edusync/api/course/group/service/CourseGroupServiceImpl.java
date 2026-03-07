@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +41,14 @@ public class CourseGroupServiceImpl implements CourseGroupService {
     @Override
     public GroupResponse createCourseGroup(GroupRequest.Create request) {
         var course = findCourse(request.courseUuid());
-        CourseModule module = null;
-        if (request.moduleUuid() != null) {
-            module = findModule(request.moduleUuid());
-        }
         var createdBy = findAppUser(request.createdByUuid());
 
-        validateUniqueNamePerCourseAndModule(course.getId(), module != null ? module.getId() : null, request.name());
+        var module = Objects.nonNull(request.moduleUuid())
+                ? findModule(request.moduleUuid())
+                : null;
+
+        var moduleId = Objects.nonNull(module) ? module.getId() : null;
+        validateUniqueNamePerCourseAndModule(course.getId(), moduleId, request.name());
 
         var group = CourseGroup.builder()
                 .course(course)
@@ -64,8 +67,14 @@ public class CourseGroupServiceImpl implements CourseGroupService {
     @Transactional(readOnly = true)
     public List<GroupResponse> findAllCourseGroupsByCourse(UUID courseUuid, String search) {
         var course = findCourse(courseUuid);
-        var spec = Specification.where(GroupSpec.hasCourseId(course.getId()))
-                .and(GroupSpec.searchByName(search));
+
+        var spec = Stream.of(
+                        GroupSpec.hasCourseId(course.getId()),
+                        GroupSpec.searchByName(search))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
+
         return repository.findAll(spec).stream()
                 .map(group -> GroupResponse.from(group, (int) memberRepository.countByGroupId(group.getId())))
                 .toList();
@@ -83,11 +92,8 @@ public class CourseGroupServiceImpl implements CourseGroupService {
         var group = findGroup(groupUuid);
 
         if (!group.getName().equals(request.name())) {
-            validateUniqueNamePerCourseAndModule(
-                    group.getCourse().getId(),
-                    group.getModule() != null ? group.getModule().getId() : null,
-                    request.name()
-            );
+            var moduleId = Objects.nonNull(group.getModule()) ? group.getModule().getId() : null;
+            validateUniqueNamePerCourseAndModule(group.getCourse().getId(), moduleId, request.name());
         }
 
         group.setName(request.name());
@@ -112,14 +118,14 @@ public class CourseGroupServiceImpl implements CourseGroupService {
             throw new ServiceException(HttpStatus.CONFLICT, "Student is already a member of this group");
         }
 
-        if (group.getMaxMembers() != null) {
+        if (Objects.nonNull(group.getMaxMembers())) {
             long currentCount = memberRepository.countByGroupId(group.getId());
             if (currentCount >= group.getMaxMembers()) {
                 throw new ServiceException(HttpStatus.CONFLICT, "Group has reached its maximum number of members");
             }
         }
 
-        var role = request.role() != null ? request.role() : GroupMemberRole.MEMBER;
+        var role = Objects.nonNull(request.role()) ? request.role() : GroupMemberRole.MEMBER;
 
         var member = CourseGroupMember.builder()
                 .group(group)
@@ -189,12 +195,9 @@ public class CourseGroupServiceImpl implements CourseGroupService {
 
     private void validateUniqueNamePerCourseAndModule(Long courseId, Long moduleId, String name) {
         var spec = Specification.where(GroupSpec.hasCourseId(courseId))
-                .and((root, query, cb) -> {
-                    if (moduleId == null) {
-                        return cb.isNull(root.get("module"));
-                    }
-                    return cb.equal(root.get("module").get("id"), moduleId);
-                })
+                .and((root, query, cb) -> Objects.isNull(moduleId)
+                        ? cb.isNull(root.get("module"))
+                        : cb.equal(root.get("module").get("id"), moduleId))
                 .and((root, query, cb) -> cb.equal(cb.lower(root.get("name")), name.toLowerCase()));
 
         if (repository.count(spec) > 0) {

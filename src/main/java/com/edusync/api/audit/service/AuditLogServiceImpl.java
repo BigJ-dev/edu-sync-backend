@@ -2,8 +2,6 @@ package com.edusync.api.audit.service;
 
 import com.edusync.api.audit.dto.AuditLogRequest;
 import com.edusync.api.audit.dto.AuditLogResponse;
-import com.edusync.api.audit.enums.AuditAction;
-import com.edusync.api.audit.enums.PerformerType;
 import com.edusync.api.audit.model.AuditLog;
 import com.edusync.api.audit.repo.AuditLogRepository;
 import com.edusync.api.common.exception.ServiceException;
@@ -13,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -47,16 +46,18 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuditLogResponse> findAllAuditLogs(AuditAction action, String entityType, Long entityId,
-                                          PerformerType performedByType, Long courseId,
-                                          Instant from, Instant to) {
-        var spec = Specification.where(AuditLogSpec.hasAction(action))
-                .and(AuditLogSpec.hasEntityType(entityType))
-                .and(AuditLogSpec.hasEntityId(entityId))
-                .and(AuditLogSpec.hasPerformedByType(performedByType))
-                .and(AuditLogSpec.hasCourseId(courseId))
-                .and(AuditLogSpec.createdAfter(from))
-                .and(AuditLogSpec.createdBefore(to));
+    public List<AuditLogResponse> findAllAuditLogs(AuditLogRequest.Filter filter) {
+        var spec = Stream.of(
+                        AuditLogSpec.hasAction(filter.action()),
+                        AuditLogSpec.hasEntityType(filter.entityType()),
+                        AuditLogSpec.hasEntityId(filter.entityId()),
+                        AuditLogSpec.hasPerformedByType(filter.performedByType()),
+                        AuditLogSpec.hasCourseId(filter.courseId()),
+                        AuditLogSpec.createdAfter(filter.from()),
+                        AuditLogSpec.createdBefore(filter.to()))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
 
         return repository.findAll(spec).stream().map(AuditLogResponse::from).toList();
     }

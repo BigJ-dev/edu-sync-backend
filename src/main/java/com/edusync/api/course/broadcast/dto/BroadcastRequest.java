@@ -44,4 +44,12 @@ public sealed interface BroadcastRequest {
 
             List<UUID> studentUuids
     ) implements BroadcastRequest {}
+
+    @Schema(name = "BroadcastFilter")
+    record Filter(
+            UUID courseUuid,
+            BroadcastTarget targetType,
+            BroadcastPriority priority,
+            String search
+    ) implements BroadcastRequest {}
 }

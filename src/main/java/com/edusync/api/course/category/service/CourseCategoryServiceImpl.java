@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +31,11 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
 
     @Override
     public CategoryResponse createCourseCategory(CategoryRequest.Create request) {
-        CourseCategory parent = null;
-        Long parentId = null;
+        var parent = Objects.nonNull(request.parentUuid())
+                ? findCategoryEntity(request.parentUuid())
+                : null;
 
-        if (request.parentUuid() != null) {
-            parent = findCategoryEntity(request.parentUuid());
-            parentId = parent.getId();
-        }
-
+        var parentId = Objects.nonNull(parent) ? parent.getId() : null;
         validateUniqueName(request.name(), parentId);
 
         var category = CourseCategory.builder()
@@ -54,8 +53,12 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
     @Override
     @Transactional(readOnly = true)
     public List<CategoryResponse> findAllCourseCategories(Boolean active, String search) {
-        var spec = Specification.where(CategorySpec.isActive(active))
-                .and(CategorySpec.searchByName(search));
+        var spec = Stream.of(
+                        CategorySpec.isActive(active),
+                        CategorySpec.searchByName(search))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
         return repository.findAll(spec).stream().map(CategoryResponse::from).toList();
     }
 
@@ -84,7 +87,7 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
     public CategoryResponse updateCourseCategory(UUID categoryUuid, CategoryRequest.Update request) {
         var category = findCategoryEntity(categoryUuid);
 
-        Long parentId = category.getParent() != null ? category.getParent().getId() : null;
+        var parentId = Objects.nonNull(category.getParent()) ? category.getParent().getId() : null;
         if (!category.getName().equals(request.name())) {
             validateUniqueName(request.name(), parentId);
         }

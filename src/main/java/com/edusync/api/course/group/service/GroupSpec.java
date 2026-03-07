@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Objects;
+
 import static com.edusync.api.course.group.enums.GroupField.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,7 +17,7 @@ public final class GroupSpec {
     }
 
     public static Specification<CourseGroup> searchByName(String search) {
-        if (search == null || search.isBlank()) return null;
+        if (Objects.isNull(search) || search.isBlank()) return null;
         var pattern = "%" + search.toLowerCase() + "%";
         return (root, query, cb) -> cb.like(cb.lower(root.get(NAME.getName())), pattern);
     }

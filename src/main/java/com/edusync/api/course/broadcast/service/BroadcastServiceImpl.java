@@ -8,8 +8,6 @@ import com.edusync.api.common.exception.ServiceException;
 import com.edusync.api.course.broadcast.dto.BroadcastRecipientResponse;
 import com.edusync.api.course.broadcast.dto.BroadcastRequest;
 import com.edusync.api.course.broadcast.dto.BroadcastResponse;
-import com.edusync.api.course.broadcast.enums.BroadcastPriority;
-import com.edusync.api.course.broadcast.enums.BroadcastTarget;
 import com.edusync.api.course.broadcast.model.BroadcastMessage;
 import com.edusync.api.course.broadcast.model.BroadcastRecipient;
 import com.edusync.api.course.broadcast.repo.BroadcastMessageRepository;
@@ -26,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -44,15 +44,13 @@ public class BroadcastServiceImpl implements BroadcastService {
     public BroadcastResponse createBroadcast(BroadcastRequest.Create request) {
         var sender = findAppUser(request.sentByUuid());
 
-        Course course = null;
-        if (request.courseUuid() != null) {
-            course = findCourse(request.courseUuid());
-        }
+        var course = Objects.nonNull(request.courseUuid())
+                ? findCourse(request.courseUuid())
+                : null;
 
-        CourseModule module = null;
-        if (request.moduleUuid() != null) {
-            module = findModule(request.moduleUuid());
-        }
+        var module = Objects.nonNull(request.moduleUuid())
+                ? findModule(request.moduleUuid())
+                : null;
 
         var message = BroadcastMessage.builder()
                 .course(course)
@@ -70,16 +68,15 @@ public class BroadcastServiceImpl implements BroadcastService {
 
         var savedMessage = messageRepository.save(message);
 
-        if (request.studentUuids() != null && !request.studentUuids().isEmpty()) {
-            for (UUID studentUuid : request.studentUuids()) {
-                var student = findStudent(studentUuid);
-                var recipient = BroadcastRecipient.builder()
-                        .broadcastMessage(savedMessage)
-                        .student(student)
-                        .emailSent(false)
-                        .build();
-                recipientRepository.save(recipient);
-            }
+        if (Objects.nonNull(request.studentUuids()) && !request.studentUuids().isEmpty()) {
+            request.studentUuids().stream()
+                    .map(this::findStudent)
+                    .map(student -> BroadcastRecipient.builder()
+                            .broadcastMessage(savedMessage)
+                            .student(student)
+                            .emailSent(false)
+                            .build())
+                    .forEach(recipientRepository::save);
         }
 
         return BroadcastResponse.from(savedMessage);
@@ -87,16 +84,19 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BroadcastResponse> findAllBroadcasts(UUID courseUuid, BroadcastTarget targetType, BroadcastPriority priority, String search) {
-        Long courseId = null;
-        if (courseUuid != null) {
-            courseId = findCourse(courseUuid).getId();
-        }
+    public List<BroadcastResponse> findAllBroadcasts(BroadcastRequest.Filter filter) {
+        var courseId = Objects.nonNull(filter.courseUuid())
+                ? findCourse(filter.courseUuid()).getId()
+                : null;
 
-        var spec = Specification.where(BroadcastSpec.hasCourseId(courseId))
-                .and(BroadcastSpec.hasTargetType(targetType))
-                .and(BroadcastSpec.hasPriority(priority))
-                .and(BroadcastSpec.searchByTitle(search));
+        var spec = Stream.of(
+                        BroadcastSpec.hasCourseId(courseId),
+                        BroadcastSpec.hasTargetType(filter.targetType()),
+                        BroadcastSpec.hasPriority(filter.priority()),
+                        BroadcastSpec.searchByTitle(filter.search()))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
 
         return messageRepository.findAll(spec).stream().map(BroadcastResponse::from).toList();
     }
@@ -123,7 +123,7 @@ public class BroadcastServiceImpl implements BroadcastService {
         var recipient = recipientRepository.findByBroadcastMessageIdAndStudentId(message.getId(), student.getId())
                 .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Broadcast recipient was not found"));
 
-        if (recipient.getReadAt() == null) {
+        if (Objects.isNull(recipient.getReadAt())) {
             recipient.setReadAt(Instant.now());
             recipientRepository.save(recipient);
         }

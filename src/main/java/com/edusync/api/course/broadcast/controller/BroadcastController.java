@@ -4,8 +4,6 @@ import com.edusync.api.course.broadcast.controller.api.BroadcastApi;
 import com.edusync.api.course.broadcast.dto.BroadcastRecipientResponse;
 import com.edusync.api.course.broadcast.dto.BroadcastRequest;
 import com.edusync.api.course.broadcast.dto.BroadcastResponse;
-import com.edusync.api.course.broadcast.enums.BroadcastPriority;
-import com.edusync.api.course.broadcast.enums.BroadcastTarget;
 import com.edusync.api.course.broadcast.service.BroadcastService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +25,8 @@ public class BroadcastController implements BroadcastApi {
     }
 
     @Override
-    public List<BroadcastResponse> findAll(UUID courseUuid, BroadcastTarget targetType, BroadcastPriority priority, String search) {
-        return service.findAllBroadcasts(courseUuid, targetType, priority, search);
+    public List<BroadcastResponse> findAll(BroadcastRequest.Filter filter) {
+        return service.findAllBroadcasts(filter);
     }
 
     @Override

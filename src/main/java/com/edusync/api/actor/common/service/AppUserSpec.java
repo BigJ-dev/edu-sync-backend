@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Objects;
+
 import static com.edusync.api.actor.common.enums.AppUserField.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,11 +18,11 @@ public final class AppUserSpec {
     }
 
     public static Specification<AppUser> isActive(Boolean active) {
-        return active == null ? null : (root, query, cb) -> cb.equal(root.get(ACTIVE.getName()), active);
+        return Objects.isNull(active) ? null : (root, query, cb) -> cb.equal(root.get(ACTIVE.getName()), active);
     }
 
     public static Specification<AppUser> searchByNameOrEmail(String search) {
-        if (search == null || search.isBlank()) return null;
+        if (Objects.isNull(search) || search.isBlank()) return null;
         var pattern = "%" + search.toLowerCase() + "%";
         return (root, query, cb) -> cb.or(
                 cb.like(cb.lower(root.get(FIRST_NAME.getName())), pattern),

@@ -5,6 +5,7 @@ import com.edusync.api.audit.enums.PerformerType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public sealed interface AuditLogRequest {
@@ -45,5 +46,16 @@ public sealed interface AuditLogRequest {
 
             @Size(max = 500, message = "User agent must not exceed 500 characters")
             String userAgent
+    ) implements AuditLogRequest {}
+
+    @Schema(name = "AuditLogFilter")
+    record Filter(
+            AuditAction action,
+            String entityType,
+            Long entityId,
+            PerformerType performedByType,
+            Long courseId,
+            Instant from,
+            Instant to
     ) implements AuditLogRequest {}
 }

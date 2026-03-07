@@ -3,8 +3,6 @@ package com.edusync.api.course.broadcast.controller.api;
 import com.edusync.api.course.broadcast.dto.BroadcastRecipientResponse;
 import com.edusync.api.course.broadcast.dto.BroadcastRequest;
 import com.edusync.api.course.broadcast.dto.BroadcastResponse;
-import com.edusync.api.course.broadcast.enums.BroadcastPriority;
-import com.edusync.api.course.broadcast.enums.BroadcastTarget;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,11 +35,7 @@ public interface BroadcastApi {
                     "and searching by title."
     )
     @ApiResponse(responseCode = "200", description = "Broadcasts retrieved successfully")
-    List<BroadcastResponse> findAll(
-            @RequestParam(required = false) UUID courseUuid,
-            @RequestParam(required = false) BroadcastTarget targetType,
-            @RequestParam(required = false) BroadcastPriority priority,
-            @RequestParam(required = false) String search);
+    List<BroadcastResponse> findAll(BroadcastRequest.Filter filter);
 
     @GetMapping("/{broadcastUuid}")
     @Operation(

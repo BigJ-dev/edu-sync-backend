@@ -2,7 +2,6 @@ package com.edusync.api.course.certificate.controller.api;
 
 import com.edusync.api.course.certificate.dto.CertificateRequest;
 import com.edusync.api.course.certificate.dto.CertificateResponse;
-import com.edusync.api.course.certificate.enums.CertificateStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,10 +36,7 @@ public interface CertificateApi {
                     "Supports filtering by course, status, and certificate number search."
     )
     @ApiResponse(responseCode = "200", description = "Certificates retrieved successfully")
-    List<CertificateResponse> findAllCertificates(
-            @RequestParam(required = false) UUID courseUuid,
-            @RequestParam(required = false) CertificateStatus status,
-            @RequestParam(required = false) String search);
+    List<CertificateResponse> findAllCertificates(CertificateRequest.Filter filter);
 
     @GetMapping("/{certificateUuid}")
     @Operation(

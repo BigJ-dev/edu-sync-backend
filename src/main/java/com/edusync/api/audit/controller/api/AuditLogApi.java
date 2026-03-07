@@ -2,8 +2,6 @@ package com.edusync.api.audit.controller.api;
 
 import com.edusync.api.audit.dto.AuditLogRequest;
 import com.edusync.api.audit.dto.AuditLogResponse;
-import com.edusync.api.audit.enums.AuditAction;
-import com.edusync.api.audit.enums.PerformerType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @Tag(name = "Audit Log", description = "Endpoints for managing audit log entries. Tracks all significant actions performed within the system.")
@@ -35,14 +32,7 @@ public interface AuditLogApi {
                     "course, and date range."
     )
     @ApiResponse(responseCode = "200", description = "Audit log entries retrieved successfully")
-    List<AuditLogResponse> findAllAuditLogs(
-            @RequestParam(required = false) AuditAction action,
-            @RequestParam(required = false) String entityType,
-            @RequestParam(required = false) Long entityId,
-            @RequestParam(required = false) PerformerType performedByType,
-            @RequestParam(required = false) Long courseId,
-            @RequestParam(required = false) Instant from,
-            @RequestParam(required = false) Instant to);
+    List<AuditLogResponse> findAllAuditLogs(AuditLogRequest.Filter filter);
 
     @GetMapping("/{id}")
     @Operation(

@@ -13,7 +13,6 @@ import com.edusync.api.course.certificate.repo.CertificateRepository;
 import com.edusync.api.course.common.model.Course;
 import com.edusync.api.course.common.repo.CourseRepository;
 import com.edusync.api.course.enrollment.enums.EnrollmentStatus;
-import com.edusync.api.course.enrollment.model.CourseEnrollment;
 import com.edusync.api.course.enrollment.repo.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -76,15 +77,18 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CertificateResponse> findAllCertificates(UUID courseUuid, CertificateStatus status, String search) {
-        Long courseId = null;
-        if (courseUuid != null) {
-            courseId = findCourse(courseUuid).getId();
-        }
+    public List<CertificateResponse> findAllCertificates(CertificateRequest.Filter filter) {
+        var courseId = Objects.nonNull(filter.courseUuid())
+                ? findCourse(filter.courseUuid()).getId()
+                : null;
 
-        var spec = Specification.where(CertificateSpec.hasCourseId(courseId))
-                .and(CertificateSpec.hasStatus(status))
-                .and(CertificateSpec.searchByCertificateNumber(search));
+        var spec = Stream.of(
+                        CertificateSpec.hasCourseId(courseId),
+                        CertificateSpec.hasStatus(filter.status()),
+                        CertificateSpec.searchByCertificateNumber(filter.search()))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
 
         return repository.findAll(spec).stream()
                 .map(CertificateResponse::from)
@@ -124,7 +128,10 @@ public class CertificateServiceImpl implements CertificateService {
     public List<CertificateResponse> findCertificatesByStudent(UUID studentUuid) {
         var student = findStudent(studentUuid);
 
-        var spec = Specification.where(CertificateSpec.hasStudentId(student.getId()));
+        var spec = Stream.of(CertificateSpec.hasStudentId(student.getId()))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
 
         return repository.findAll(spec).stream()
                 .map(CertificateResponse::from)

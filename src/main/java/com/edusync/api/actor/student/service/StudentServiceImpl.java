@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +47,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional(readOnly = true)
     public Page<StudentResponse> findAllStudents(Boolean active, String search, Pageable pageable) {
-        var spec = Specification.where(StudentSpec.isActive(active))
-                .and(StudentSpec.searchByNameEmailOrNumber(search));
+        var spec = Stream.of(
+                        StudentSpec.isActive(active),
+                        StudentSpec.searchByNameEmailOrNumber(search))
+                .filter(Objects::nonNull)
+                .reduce(Specification::and)
+                .orElse((root, query, cb) -> cb.conjunction());
         return repository.findAll(spec, pageable).map(StudentResponse::from);
     }
 

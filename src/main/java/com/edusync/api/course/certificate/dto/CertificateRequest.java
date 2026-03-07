@@ -1,5 +1,6 @@
 package com.edusync.api.course.certificate.dto;
 
+import com.edusync.api.course.certificate.enums.CertificateStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,5 +39,12 @@ public sealed interface CertificateRequest {
             @NotBlank(message = "Revocation reason is required")
             @Size(max = 500, message = "Revocation reason must not exceed 500 characters")
             String revocationReason
+    ) implements CertificateRequest {}
+
+    @Schema(name = "CertificateFilter")
+    record Filter(
+            UUID courseUuid,
+            CertificateStatus status,
+            String search
     ) implements CertificateRequest {}
 }

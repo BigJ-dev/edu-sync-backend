@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -35,16 +36,13 @@ public class FocusModeServiceImpl implements FocusModeService {
     public FocusModeResponse activateFocusMode(FocusModeRequest.Activate request) {
         var lecturer = findLecturer(request.lecturerUuid());
         var course = findCourse(request.courseUuid());
-        CourseModule module = null;
 
-        if (request.moduleUuid() != null) {
-            module = findModule(request.moduleUuid());
-        }
+        var module = Objects.nonNull(request.moduleUuid())
+                ? findModule(request.moduleUuid())
+                : null;
 
-        if (request.scheduledEnd() != null) {
-            if (Instant.now().isAfter(request.scheduledEnd())) {
-                throw new ServiceException(HttpStatus.BAD_REQUEST, "Scheduled end must be in the future");
-            }
+        if (Objects.nonNull(request.scheduledEnd()) && Instant.now().isAfter(request.scheduledEnd())) {
+            throw new ServiceException(HttpStatus.BAD_REQUEST, "Scheduled end must be in the future");
         }
 
         var focusMode = findOrCreate(lecturer, course, module);
@@ -61,15 +59,11 @@ public class FocusModeServiceImpl implements FocusModeService {
         var lecturer = findLecturer(lecturerUuid);
         var course = findCourse(courseUuid);
 
-        LecturerFocusMode focusMode;
-        if (moduleUuid != null) {
-            var module = findModule(moduleUuid);
-            focusMode = repository.findByLecturerIdAndCourseIdAndModuleId(lecturer.getId(), course.getId(), module.getId())
+        var focusMode = Objects.nonNull(moduleUuid)
+                ? repository.findByLecturerIdAndCourseIdAndModuleId(lecturer.getId(), course.getId(), findModule(moduleUuid).getId())
+                    .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Focus mode record was not found"))
+                : repository.findByLecturerIdAndCourseId(lecturer.getId(), course.getId())
                     .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Focus mode record was not found"));
-        } else {
-            focusMode = repository.findByLecturerIdAndCourseId(lecturer.getId(), course.getId())
-                    .orElseThrow(() -> new ServiceException(HttpStatus.NOT_FOUND, "Focus mode record was not found"));
-        }
 
         focusMode.setActive(false);
         focusMode.setActivatedAt(null);
@@ -102,7 +96,7 @@ public class FocusModeServiceImpl implements FocusModeService {
         var lecturer = findLecturer(lecturerUuid);
         var course = findCourse(courseUuid);
 
-        if (moduleUuid != null) {
+        if (Objects.nonNull(moduleUuid)) {
             var module = findModule(moduleUuid);
             return repository.findByLecturerIdAndCourseIdAndModuleId(lecturer.getId(), course.getId(), module.getId())
                     .map(LecturerFocusMode::isActive)
@@ -115,7 +109,7 @@ public class FocusModeServiceImpl implements FocusModeService {
     }
 
     private LecturerFocusMode findOrCreate(AppUser lecturer, Course course, CourseModule module) {
-        if (module != null) {
+        if (Objects.nonNull(module)) {
             return repository.findByLecturerIdAndCourseIdAndModuleId(lecturer.getId(), course.getId(), module.getId())
                     .orElseGet(() -> LecturerFocusMode.builder()
                             .lecturer(lecturer)
