@@ -15,4 +15,6 @@ public interface QuizRepository extends JpaRepository<Quiz, Long>, JpaSpecificat
     boolean existsByModuleIdAndTitle(Long moduleId, String title);
 
     List<Quiz> findByModuleCourseId(Long courseId);
+
+    List<Quiz> findByCreatedById(Long createdById);
 }

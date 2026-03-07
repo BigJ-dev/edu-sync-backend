@@ -104,4 +104,14 @@ public sealed interface AssessmentRequest {
             @NotNull(message = _ASSESSMENT_STATUS_REQUIRED)
             AssessmentStatus status
     ) implements AssessmentRequest {}
+
+    @Schema(name = "AssessmentReopen", description = "Reopen a closed/graded assessment with a new due date so students can submit again.")
+    record Reopen(
+            @NotNull(message = _ASSESSMENT_DUE_DATE_REQUIRED)
+            Instant newDueDate,
+
+            Instant visibleFrom,
+
+            Boolean allowLateSubmission
+    ) implements AssessmentRequest {}
 }

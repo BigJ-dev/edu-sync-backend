@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Objects;
+
 import static com.edusync.api.course.assessment.submission.enums.SubmissionField.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,10 +18,10 @@ public final class SubmissionSpec {
     }
 
     public static Specification<AssessmentSubmission> hasStatus(SubmissionStatus status) {
-        return status == null ? null : (root, query, cb) -> cb.equal(root.get(STATUS.getName()), status);
+        return Objects.isNull(status) ? null : (root, query, cb) -> cb.equal(root.get(STATUS.getName()), status);
     }
 
     public static Specification<AssessmentSubmission> isLate(Boolean late) {
-        return late == null ? null : (root, query, cb) -> cb.equal(root.get(IS_LATE.getName()), late);
+        return Objects.isNull(late) ? null : (root, query, cb) -> cb.equal(root.get(IS_LATE.getName()), late);
     }
 }

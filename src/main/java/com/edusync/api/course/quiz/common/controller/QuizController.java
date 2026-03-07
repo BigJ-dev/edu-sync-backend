@@ -43,4 +43,19 @@ public class QuizController implements QuizApi {
     public QuizResponse updateStatus(UUID moduleUuid, UUID quizUuid, QuizRequest.UpdateStatus request) {
         return service.updateQuizStatus(quizUuid, request);
     }
+
+    @Override
+    public void delete(UUID moduleUuid, UUID quizUuid) {
+        service.deleteQuiz(quizUuid);
+    }
+
+    @Override
+    public QuizResponse duplicate(UUID moduleUuid, UUID quizUuid, UUID targetModuleUuid) {
+        return service.duplicateQuiz(quizUuid, targetModuleUuid != null ? targetModuleUuid : moduleUuid);
+    }
+
+    @Override
+    public QuizResponse reopen(UUID moduleUuid, UUID quizUuid, QuizRequest.Reopen request) {
+        return service.reopenQuiz(quizUuid, request);
+    }
 }

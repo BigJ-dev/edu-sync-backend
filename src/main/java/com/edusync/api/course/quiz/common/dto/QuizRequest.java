@@ -105,4 +105,16 @@ public sealed interface QuizRequest {
             @NotNull(message = "Quiz status is required")
             QuizStatus status
     ) implements QuizRequest {}
+
+    @Schema(name = "QuizReopen", description = "Reopen a closed quiz with new visibility window so students can attempt it again.")
+    record Reopen(
+            @NotNull(message = "Visible from is required")
+            Instant visibleFrom,
+
+            @NotNull(message = "Visible until is required")
+            Instant visibleUntil,
+
+            @Min(value = 1, message = "Max attempts must be at least 1")
+            Integer additionalAttempts
+    ) implements QuizRequest {}
 }

@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +49,7 @@ public class AssessmentServiceImpl implements AssessmentService {
                 .weightPct(request.weightPct())
                 .dueDate(request.dueDate())
                 .visibleFrom(request.visibleFrom())
-                .allowLateSubmission(request.allowLateSubmission() != null ? request.allowLateSubmission() : false)
+                .allowLateSubmission(Objects.requireNonNullElse(request.allowLateSubmission(), false))
                 .latePenaltyPct(request.latePenaltyPct())
                 .briefS3Key(request.briefS3Key())
                 .briefFileName(request.briefFileName())
@@ -59,14 +62,18 @@ public class AssessmentServiceImpl implements AssessmentService {
     @Override
     @Transactional(readOnly = true)
     public List<AssessmentResponse> findAllAssessmentsByModule(UUID moduleUuid, AssessmentStatus status,
-                                                     AssessmentType type, DeliveryMode mode, String search) {
+                                                               AssessmentType type, DeliveryMode mode, String search) {
         var module = findModule(moduleUuid);
+
         var spec = Specification.where(AssessmentSpec.hasModuleId(module.getId()))
                 .and(AssessmentSpec.hasStatus(status))
                 .and(AssessmentSpec.hasAssessmentType(type))
                 .and(AssessmentSpec.hasDeliveryMode(mode))
                 .and(AssessmentSpec.searchByTitle(search));
-        return repository.findAll(spec).stream().map(AssessmentResponse::from).toList();
+
+        return repository.findAll(spec).stream()
+                .map(AssessmentResponse::from)
+                .toList();
     }
 
     @Override
@@ -78,6 +85,7 @@ public class AssessmentServiceImpl implements AssessmentService {
     @Override
     public AssessmentResponse updateAssessment(UUID assessmentUuid, AssessmentRequest.Update request) {
         var assessment = findAssessmentEntityByUuid(assessmentUuid);
+
         assessment.setTitle(request.title());
         assessment.setDescription(request.description());
         assessment.setAssessmentType(request.assessmentType());
@@ -86,10 +94,12 @@ public class AssessmentServiceImpl implements AssessmentService {
         assessment.setWeightPct(request.weightPct());
         assessment.setDueDate(request.dueDate());
         assessment.setVisibleFrom(request.visibleFrom());
-        if (request.allowLateSubmission() != null) assessment.setAllowLateSubmission(request.allowLateSubmission());
         assessment.setLatePenaltyPct(request.latePenaltyPct());
         assessment.setBriefS3Key(request.briefS3Key());
         assessment.setBriefFileName(request.briefFileName());
+
+        Optional.ofNullable(request.allowLateSubmission()).ifPresent(assessment::setAllowLateSubmission);
+
         return AssessmentResponse.from(repository.save(assessment));
     }
 
@@ -98,6 +108,65 @@ public class AssessmentServiceImpl implements AssessmentService {
         var assessment = findAssessmentEntityByUuid(assessmentUuid);
         assessment.setStatus(request.status());
         return AssessmentResponse.from(repository.save(assessment));
+    }
+
+    @Override
+    public void deleteAssessment(UUID assessmentUuid) {
+        repository.delete(findAssessmentEntityByUuid(assessmentUuid));
+    }
+
+    @Override
+    public AssessmentResponse duplicateAssessment(UUID assessmentUuid, UUID targetModuleUuid) {
+        var source = findAssessmentEntityByUuid(assessmentUuid);
+        var targetModule = findModule(targetModuleUuid);
+
+        var copy = Assessment.builder()
+                .module(targetModule)
+                .createdBy(source.getCreatedBy())
+                .title(source.getTitle() + " (Copy)")
+                .description(source.getDescription())
+                .assessmentType(source.getAssessmentType())
+                .deliveryMode(source.getDeliveryMode())
+                .totalMarks(source.getTotalMarks())
+                .weightPct(source.getWeightPct())
+                .dueDate(source.getDueDate())
+                .visibleFrom(source.getVisibleFrom())
+                .allowLateSubmission(source.isAllowLateSubmission())
+                .latePenaltyPct(source.getLatePenaltyPct())
+                .briefS3Key(source.getBriefS3Key())
+                .briefFileName(source.getBriefFileName())
+                .status(AssessmentStatus.DRAFT)
+                .build();
+
+        return AssessmentResponse.from(repository.save(copy));
+    }
+
+    @Override
+    public AssessmentResponse reopenAssessment(UUID assessmentUuid, AssessmentRequest.Reopen request) {
+        var assessment = findAssessmentEntityByUuid(assessmentUuid);
+
+        assessment.setStatus(AssessmentStatus.PUBLISHED);
+        assessment.setDueDate(request.newDueDate());
+
+        Optional.ofNullable(request.visibleFrom()).ifPresent(assessment::setVisibleFrom);
+        Optional.ofNullable(request.allowLateSubmission()).ifPresent(assessment::setAllowLateSubmission);
+
+        return AssessmentResponse.from(repository.save(assessment));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AssessmentResponse> findAllByLecturer(UUID lecturerUuid, AssessmentStatus status, String search) {
+        var lecturer = findAppUser(lecturerUuid);
+
+        Predicate<Assessment> statusFilter = a -> Objects.isNull(status) || a.getStatus() == status;
+        Predicate<Assessment> searchFilter = a -> Objects.isNull(search) || search.isBlank()
+                || a.getTitle().toLowerCase().contains(search.toLowerCase());
+
+        return repository.findByCreatedById(lecturer.getId()).stream()
+                .filter(statusFilter.and(searchFilter))
+                .map(AssessmentResponse::from)
+                .toList();
     }
 
     @Override

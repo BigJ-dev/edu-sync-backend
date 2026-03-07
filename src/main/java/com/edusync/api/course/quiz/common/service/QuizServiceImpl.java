@@ -3,8 +3,6 @@ package com.edusync.api.course.quiz.common.service;
 import com.edusync.api.actor.common.model.AppUser;
 import com.edusync.api.actor.common.repo.AppUserRepository;
 import com.edusync.api.common.exception.ServiceException;
-import com.edusync.api.course.session.model.ClassSession;
-import com.edusync.api.course.session.repo.ClassSessionRepository;
 import com.edusync.api.course.module.model.CourseModule;
 import com.edusync.api.course.module.repo.ModuleRepository;
 import com.edusync.api.course.quiz.common.dto.QuizRequest;
@@ -12,19 +10,28 @@ import com.edusync.api.course.quiz.common.dto.QuizResponse;
 import com.edusync.api.course.quiz.common.enums.QuizStatus;
 import com.edusync.api.course.quiz.common.model.Quiz;
 import com.edusync.api.course.quiz.common.repo.QuizRepository;
+import com.edusync.api.course.session.model.ClassSession;
+import com.edusync.api.course.session.repo.ClassSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class QuizServiceImpl implements QuizService {
+
+    private static final BigDecimal DEFAULT_PASS_MARK_PCT = new BigDecimal("50");
+    private static final int DEFAULT_MAX_ATTEMPTS = 1;
 
     private final QuizRepository repository;
     private final ModuleRepository moduleRepository;
@@ -35,10 +42,9 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponse createQuiz(UUID moduleUuid, QuizRequest.Create request) {
         var module = findModule(moduleUuid);
         var createdBy = findAppUser(request.createdByUuid());
-        ClassSession classSession = null;
-        if (request.classSessionUuid() != null) {
-            classSession = findClassSession(request.classSessionUuid());
-        }
+        var classSession = Optional.ofNullable(request.classSessionUuid())
+                .map(this::findClassSession)
+                .orElse(null);
 
         var quiz = Quiz.builder()
                 .module(module)
@@ -48,11 +54,11 @@ public class QuizServiceImpl implements QuizService {
                 .description(request.description())
                 .timeLimitMinutes(request.timeLimitMinutes())
                 .totalMarks(request.totalMarks())
-                .passMarkPct(request.passMarkPct() != null ? request.passMarkPct() : new java.math.BigDecimal("50"))
+                .passMarkPct(Objects.requireNonNullElse(request.passMarkPct(), DEFAULT_PASS_MARK_PCT))
                 .weightPct(request.weightPct())
-                .maxAttempts(request.maxAttempts() != null ? request.maxAttempts() : 1)
-                .shuffleQuestions(request.shuffleQuestions() != null ? request.shuffleQuestions() : false)
-                .showAnswersAfter(request.showAnswersAfter() != null ? request.showAnswersAfter() : true)
+                .maxAttempts(Objects.requireNonNullElse(request.maxAttempts(), DEFAULT_MAX_ATTEMPTS))
+                .shuffleQuestions(Objects.requireNonNullElse(request.shuffleQuestions(), false))
+                .showAnswersAfter(Objects.requireNonNullElse(request.showAnswersAfter(), true))
                 .documentS3Key(request.documentS3Key())
                 .documentName(request.documentName())
                 .visibleFrom(request.visibleFrom())
@@ -67,10 +73,14 @@ public class QuizServiceImpl implements QuizService {
     @Transactional(readOnly = true)
     public List<QuizResponse> findAllQuizzesByModule(UUID moduleUuid, QuizStatus status, String search) {
         var module = findModule(moduleUuid);
+
         var spec = Specification.where(QuizSpec.hasModuleId(module.getId()))
                 .and(QuizSpec.hasStatus(status))
                 .and(QuizSpec.searchByTitle(search));
-        return repository.findAll(spec).stream().map(QuizResponse::from).toList();
+
+        return repository.findAll(spec).stream()
+                .map(QuizResponse::from)
+                .toList();
     }
 
     @Override
@@ -82,19 +92,22 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public QuizResponse updateQuiz(UUID quizUuid, QuizRequest.Update request) {
         var quiz = findQuizEntityByUuid(quizUuid);
+
         quiz.setTitle(request.title());
         quiz.setDescription(request.description());
         quiz.setTimeLimitMinutes(request.timeLimitMinutes());
         quiz.setTotalMarks(request.totalMarks());
-        if (request.passMarkPct() != null) quiz.setPassMarkPct(request.passMarkPct());
         quiz.setWeightPct(request.weightPct());
-        if (request.maxAttempts() != null) quiz.setMaxAttempts(request.maxAttempts());
-        if (request.shuffleQuestions() != null) quiz.setShuffleQuestions(request.shuffleQuestions());
-        if (request.showAnswersAfter() != null) quiz.setShowAnswersAfter(request.showAnswersAfter());
         quiz.setDocumentS3Key(request.documentS3Key());
         quiz.setDocumentName(request.documentName());
         quiz.setVisibleFrom(request.visibleFrom());
         quiz.setVisibleUntil(request.visibleUntil());
+
+        Optional.ofNullable(request.passMarkPct()).ifPresent(quiz::setPassMarkPct);
+        Optional.ofNullable(request.maxAttempts()).ifPresent(quiz::setMaxAttempts);
+        Optional.ofNullable(request.shuffleQuestions()).ifPresent(quiz::setShuffleQuestions);
+        Optional.ofNullable(request.showAnswersAfter()).ifPresent(quiz::setShowAnswersAfter);
+
         return QuizResponse.from(repository.save(quiz));
     }
 
@@ -103,6 +116,67 @@ public class QuizServiceImpl implements QuizService {
         var quiz = findQuizEntityByUuid(quizUuid);
         quiz.setStatus(request.status());
         return QuizResponse.from(repository.save(quiz));
+    }
+
+    @Override
+    public void deleteQuiz(UUID quizUuid) {
+        repository.delete(findQuizEntityByUuid(quizUuid));
+    }
+
+    @Override
+    public QuizResponse duplicateQuiz(UUID quizUuid, UUID targetModuleUuid) {
+        var source = findQuizEntityByUuid(quizUuid);
+        var targetModule = findModule(targetModuleUuid);
+
+        var copy = Quiz.builder()
+                .module(targetModule)
+                .createdBy(source.getCreatedBy())
+                .title(source.getTitle() + " (Copy)")
+                .description(source.getDescription())
+                .timeLimitMinutes(source.getTimeLimitMinutes())
+                .totalMarks(source.getTotalMarks())
+                .passMarkPct(source.getPassMarkPct())
+                .weightPct(source.getWeightPct())
+                .maxAttempts(source.getMaxAttempts())
+                .shuffleQuestions(source.isShuffleQuestions())
+                .showAnswersAfter(source.isShowAnswersAfter())
+                .documentS3Key(source.getDocumentS3Key())
+                .documentName(source.getDocumentName())
+                .visibleFrom(source.getVisibleFrom())
+                .visibleUntil(source.getVisibleUntil())
+                .status(QuizStatus.DRAFT)
+                .build();
+
+        return QuizResponse.from(repository.save(copy));
+    }
+
+    @Override
+    public QuizResponse reopenQuiz(UUID quizUuid, QuizRequest.Reopen request) {
+        var quiz = findQuizEntityByUuid(quizUuid);
+
+        quiz.setStatus(QuizStatus.PUBLISHED);
+        quiz.setVisibleFrom(request.visibleFrom());
+        quiz.setVisibleUntil(request.visibleUntil());
+
+        Optional.ofNullable(request.additionalAttempts())
+                .ifPresent(extra -> quiz.setMaxAttempts(quiz.getMaxAttempts() + extra));
+
+        return QuizResponse.from(repository.save(quiz));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<QuizResponse> findAllByLecturer(UUID lecturerUuid, QuizStatus status, String search) {
+        var lecturer = findAppUser(lecturerUuid);
+
+        Predicate<Quiz> statusFilter = q -> Objects.isNull(status) || q.getStatus() == status;
+        Predicate<Quiz> searchFilter = q -> Objects.isNull(search) || search.isBlank()
+                || q.getTitle().toLowerCase().contains(search.toLowerCase());
+
+        return repository.findByCreatedById(lecturer.getId()).stream()
+                .filter(statusFilter.and(searchFilter))
+                .map(QuizResponse::from)
+                .toList();
     }
 
     @Override

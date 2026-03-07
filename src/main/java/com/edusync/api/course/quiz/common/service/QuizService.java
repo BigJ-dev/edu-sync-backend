@@ -20,5 +20,13 @@ public interface QuizService {
 
     QuizResponse updateQuizStatus(UUID quizUuid, QuizRequest.UpdateStatus request);
 
+    void deleteQuiz(UUID quizUuid);
+
+    QuizResponse duplicateQuiz(UUID quizUuid, UUID targetModuleUuid);
+
+    QuizResponse reopenQuiz(UUID quizUuid, QuizRequest.Reopen request);
+
+    List<QuizResponse> findAllByLecturer(UUID lecturerUuid, QuizStatus status, String search);
+
     Quiz findQuizEntityByUuid(UUID uuid);
 }

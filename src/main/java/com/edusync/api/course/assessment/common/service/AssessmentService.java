@@ -23,5 +23,13 @@ public interface AssessmentService {
 
     AssessmentResponse updateAssessmentStatus(UUID assessmentUuid, AssessmentRequest.UpdateStatus request);
 
+    void deleteAssessment(UUID assessmentUuid);
+
+    AssessmentResponse duplicateAssessment(UUID assessmentUuid, UUID targetModuleUuid);
+
+    AssessmentResponse reopenAssessment(UUID assessmentUuid, AssessmentRequest.Reopen request);
+
+    List<AssessmentResponse> findAllByLecturer(UUID lecturerUuid, AssessmentStatus status, String search);
+
     Assessment findAssessmentEntityByUuid(UUID uuid);
 }

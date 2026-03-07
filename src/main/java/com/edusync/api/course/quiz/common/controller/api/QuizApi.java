@@ -67,4 +67,34 @@ public interface QuizApi {
     @ApiResponse(responseCode = "200", description = "Quiz status updated successfully")
     @ApiResponse(responseCode = "404", description = "Quiz not found")
     QuizResponse updateStatus(@PathVariable UUID moduleUuid, @PathVariable UUID quizUuid, @Valid @RequestBody QuizRequest.UpdateStatus request);
+
+    @DeleteMapping("/{quizUuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a quiz", description = "Permanently deletes a quiz and its questions, options, and attempts.")
+    @ApiResponse(responseCode = "204", description = "Quiz deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Quiz not found")
+    void delete(@PathVariable UUID moduleUuid, @PathVariable UUID quizUuid);
+
+    @PostMapping("/{quizUuid}/duplicate")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Duplicate a quiz",
+            description = "Creates a copy of a quiz in DRAFT status. Optionally specify a target module UUID " +
+                    "to duplicate into a different module/course. Copies all settings but not questions or attempts."
+    )
+    @ApiResponse(responseCode = "201", description = "Quiz duplicated successfully")
+    @ApiResponse(responseCode = "404", description = "Quiz or target module not found")
+    QuizResponse duplicate(@PathVariable UUID moduleUuid, @PathVariable UUID quizUuid,
+                            @RequestParam(required = false) UUID targetModuleUuid);
+
+    @PostMapping("/{quizUuid}/reopen")
+    @Operation(
+            summary = "Reopen a quiz",
+            description = "Reopens a closed quiz with a new visibility window, making it available " +
+                    "for students to attempt again. Optionally grants additional attempts."
+    )
+    @ApiResponse(responseCode = "200", description = "Quiz reopened successfully")
+    @ApiResponse(responseCode = "404", description = "Quiz not found")
+    QuizResponse reopen(@PathVariable UUID moduleUuid, @PathVariable UUID quizUuid,
+                         @Valid @RequestBody QuizRequest.Reopen request);
 }

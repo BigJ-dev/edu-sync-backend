@@ -275,4 +275,12 @@ public class SpringDocConfig {
                 .pathsToMatch("/courses/**/grading/**")
                 .build();
     }
+
+    @Bean
+    GroupedOpenApi workOverviewApi() {
+        return GroupedOpenApi.builder()
+                .group("30. work-overview")
+                .pathsToMatch("/work/**")
+                .build();
+    }
 }

@@ -13,4 +13,6 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Long>, J
     Optional<Assessment> findByUuid(UUID uuid);
 
     List<Assessment> findByModuleCourseId(Long courseId);
+
+    List<Assessment> findByCreatedById(Long createdById);
 }

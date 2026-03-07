@@ -77,4 +77,34 @@ public interface AssessmentApi {
     @ApiResponse(responseCode = "200", description = "Assessment status updated successfully")
     @ApiResponse(responseCode = "404", description = "Assessment not found")
     AssessmentResponse updateStatus(@PathVariable UUID moduleUuid, @PathVariable UUID assessmentUuid, @Valid @RequestBody AssessmentRequest.UpdateStatus request);
+
+    @DeleteMapping("/{assessmentUuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete an assessment", description = "Permanently deletes an assessment and its submissions.")
+    @ApiResponse(responseCode = "204", description = "Assessment deleted successfully")
+    @ApiResponse(responseCode = "404", description = "Assessment not found")
+    void delete(@PathVariable UUID moduleUuid, @PathVariable UUID assessmentUuid);
+
+    @PostMapping("/{assessmentUuid}/duplicate")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(
+            summary = "Duplicate an assessment",
+            description = "Creates a copy of an assessment in DRAFT status. Optionally specify a target module UUID " +
+                    "to duplicate into a different module/course. Copies all settings but not submissions or rubric grades."
+    )
+    @ApiResponse(responseCode = "201", description = "Assessment duplicated successfully")
+    @ApiResponse(responseCode = "404", description = "Assessment or target module not found")
+    AssessmentResponse duplicate(@PathVariable UUID moduleUuid, @PathVariable UUID assessmentUuid,
+                                  @RequestParam(required = false) UUID targetModuleUuid);
+
+    @PostMapping("/{assessmentUuid}/reopen")
+    @Operation(
+            summary = "Reopen an assessment",
+            description = "Reopens a closed or graded assessment with a new due date, making it available " +
+                    "for students to submit again. Useful for giving students another chance."
+    )
+    @ApiResponse(responseCode = "200", description = "Assessment reopened successfully")
+    @ApiResponse(responseCode = "404", description = "Assessment not found")
+    AssessmentResponse reopen(@PathVariable UUID moduleUuid, @PathVariable UUID assessmentUuid,
+                               @Valid @RequestBody AssessmentRequest.Reopen request);
 }

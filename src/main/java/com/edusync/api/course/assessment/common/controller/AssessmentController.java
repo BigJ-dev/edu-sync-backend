@@ -46,4 +46,19 @@ public class AssessmentController implements AssessmentApi {
     public AssessmentResponse updateStatus(UUID moduleUuid, UUID assessmentUuid, AssessmentRequest.UpdateStatus request) {
         return service.updateAssessmentStatus(assessmentUuid, request);
     }
+
+    @Override
+    public void delete(UUID moduleUuid, UUID assessmentUuid) {
+        service.deleteAssessment(assessmentUuid);
+    }
+
+    @Override
+    public AssessmentResponse duplicate(UUID moduleUuid, UUID assessmentUuid, UUID targetModuleUuid) {
+        return service.duplicateAssessment(assessmentUuid, targetModuleUuid != null ? targetModuleUuid : moduleUuid);
+    }
+
+    @Override
+    public AssessmentResponse reopen(UUID moduleUuid, UUID assessmentUuid, AssessmentRequest.Reopen request) {
+        return service.reopenAssessment(assessmentUuid, request);
+    }
 }
