@@ -6,6 +6,7 @@ import com.edusync.api.aws.dto.S3UploadRequest;
 import com.edusync.api.common.exception.ServiceException;
 import com.edusync.api.settings.service.SystemSettingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "aws.s3", name = "enabled", havingValue = "true")
 public class S3ServiceImpl implements S3Service {
 
     private final S3Client s3Client;

@@ -5,12 +5,14 @@ import com.edusync.api.aws.dto.PresignedUrlResponse;
 import com.edusync.api.aws.dto.S3UploadRequest;
 import com.edusync.api.aws.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @Validated
+@ConditionalOnProperty(prefix = "aws.s3", name = "enabled", havingValue = "true")
 public class S3Controller implements S3Api {
 
     private final S3Service service;

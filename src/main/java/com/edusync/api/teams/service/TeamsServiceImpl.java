@@ -29,6 +29,7 @@ import com.microsoft.graph.models.OnlineMeeting;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +50,7 @@ import static com.edusync.api.teams.util.TeamsReportBuilder.*;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
+@ConditionalOnProperty(prefix = "azure.ad", name = {"tenant-id", "client-id", "client-secret"})
 public class TeamsServiceImpl implements TeamsService {
 
     private final GraphServiceClient graphClient;

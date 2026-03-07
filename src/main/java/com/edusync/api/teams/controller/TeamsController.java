@@ -5,6 +5,7 @@ import com.edusync.api.teams.dto.TeamsRequest;
 import com.edusync.api.teams.dto.TeamsResponse;
 import com.edusync.api.teams.service.TeamsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@ConditionalOnProperty(prefix = "azure.ad", name = {"tenant-id", "client-id", "client-secret"})
 public class TeamsController implements TeamsApi {
 
     private final TeamsService service;

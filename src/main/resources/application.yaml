@@ -8,15 +8,16 @@ spring:
 
 aws:
   s3:
+    enabled: ${AWS_S3_ENABLED:false}
     bucket: ${AWS_S3_BUCKET:edusync-uploads}
     region: ${AWS_REGION:af-south-1}
 
 azure:
   ad:
-    tenant-id: ${AZURE_TENANT_ID}
-    client-id: ${AZURE_CLIENT_ID}
-    client-secret: ${AZURE_CLIENT_SECRET}
-    organizer-user-id: ${AZURE_ORGANIZER_USER_ID}
+    tenant-id: ${AZURE_TENANT_ID:}
+    client-id: ${AZURE_CLIENT_ID:}
+    client-secret: ${AZURE_CLIENT_SECRET:}
+    organizer-user-id: ${AZURE_ORGANIZER_USER_ID:}
 
 springdoc:
   swagger-ui:

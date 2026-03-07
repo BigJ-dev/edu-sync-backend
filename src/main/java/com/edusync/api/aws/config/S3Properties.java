@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Setter
 public class S3Properties {
 
+    private boolean enabled;
     private String bucket;
     private String region;
 }
